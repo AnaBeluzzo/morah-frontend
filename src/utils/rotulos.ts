@@ -1,4 +1,5 @@
 import type { PrioridadeAviso, TipoPublicoAlvo } from '../tipos/avisos';
+import type { StatusCobranca, TipoRateio } from '../tipos/financeiro';
 import type { Perfil } from '../tipos/login';
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
@@ -63,4 +64,41 @@ export const ROTULOS_TIPO_PUBLICO_ALVO: Record<TipoPublicoAlvo, string> = {
   condominio: 'Todo o condomínio',
   bloco: 'Um bloco',
   unidade: 'Uma unidade',
+};
+
+// ---------------------------------------------------------------- Financeiro
+
+export const ROTULOS_STATUS_COBRANCA: Record<StatusCobranca, string> = {
+  pendente: 'Pendente',
+  pago: 'Pago',
+  atrasado: 'Atrasado',
+  cancelado: 'Cancelado',
+};
+
+export const TOM_STATUS_COBRANCA: Record<StatusCobranca, TomSelo> = {
+  pendente: 'alerta',
+  pago: 'sucesso',
+  atrasado: 'perigo',
+  cancelado: 'neutro',
+};
+
+export const ROTULOS_TIPO_RATEIO: Record<TipoRateio, string> = {
+  igualitario: 'Igualitário (divide pelo número de unidades)',
+  fracao_ideal: 'Por fração ideal da unidade',
+};
+
+/** `tipo` do documento e `meio` da baixa são textos livres no contrato: estes são os valores sugeridos. */
+export const ROTULOS_TIPO_DOCUMENTO: Record<string, string> = {
+  nota_fiscal: 'Nota fiscal',
+  prestacao_contas: 'Prestação de contas',
+  balancete: 'Balancete',
+  outro: 'Outro',
+};
+
+export const ROTULOS_MEIO_PAGAMENTO: Record<string, string> = {
+  transferencia: 'Transferência',
+  pix: 'PIX',
+  dinheiro: 'Dinheiro',
+  boleto: 'Boleto',
+  cheque: 'Cheque',
 };

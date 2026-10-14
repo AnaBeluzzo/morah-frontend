@@ -16,5 +16,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     // datas e horas dos testes no mesmo fuso do e2e
     env: { TZ: 'America/Sao_Paulo' },
+    // os testes de tela digitam como uma pessoa (user-event): folga para máquinas mais lentas
+    testTimeout: 15_000,
   },
 });

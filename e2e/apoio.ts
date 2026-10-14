@@ -122,9 +122,9 @@ export const SENHA_DEMO = 'demo123';
 
 /** Abas inferiores que cada perfil deve ver (com todos os módulos ativos). */
 export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
-  morador: ['Início', 'Avisos', 'Mais'],
-  proprietario: ['Início', 'Avisos', 'Mais'],
-  sindico: ['Início', 'Avisos', 'Condomínio', 'Mais'],
+  morador: ['Início', 'Avisos', 'Financeiro', 'Mais'],
+  proprietario: ['Início', 'Avisos', 'Financeiro', 'Mais'],
+  sindico: ['Início', 'Financeiro', 'Avisos', 'Condomínio', 'Mais'],
   portaria: ['Início', 'Mais'],
 };
 
@@ -195,4 +195,13 @@ export async function lerTodasAsNotificacoes(request: APIRequestContext, perfil:
 /** Sino da barra superior (o nome acessível traz a contagem de não lidas). */
 export function sino(pagina: Page) {
   return pagina.getByRole('banner').getByRole('link', { name: /^Notificações/ });
+}
+
+/**
+ * Competência (AAAA-MM) única por execução: o ano vem do relógio, o mês é escolhido pelo teste.
+ * Assim cada teste cria as próprias cobranças sem colidir com o seed nem com outro teste.
+ */
+export function competenciaUnica(mes: number): string {
+  const ano = 2100 + (Math.floor(Date.now() / 1000) % 700);
+  return `${ano}-${String(mes).padStart(2, '0')}`;
 }

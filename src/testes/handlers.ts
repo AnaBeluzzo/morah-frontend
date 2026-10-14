@@ -4,6 +4,7 @@
 import { http, HttpResponse } from 'msw';
 import type { Aviso } from '../tipos/avisos';
 import type { Problem } from '../tipos/comum';
+import type { Cobranca, DocumentoFinanceiro, InadimplenciaResumo, Taxa } from '../tipos/financeiro';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
 import type { Notificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
@@ -117,6 +118,19 @@ export const AVISOS: Aviso[] = [
 /** Aviso que já saiu de vigência: o GET responde 410. */
 export const ID_AVISO_EXPIRADO = 99;
 
+// ---------------------------------------------------------------- Financeiro
+
+export const COBRANCAS: Cobranca[] = [
+  { id: 1, unidadeId: 1, taxaDescricao: 'Taxa condominial', competencia: '2026-09', vencimento: '2026-09-10', valorOriginal: 500, multa: 10, juros: 2.5, valorTotal: 512.5, status: 'atrasado' },
+  { id: 3, unidadeId: 1, taxaDescricao: 'Fundo de obras', competencia: '2026-08', vencimento: '2026-08-10', valorOriginal: 150, multa: 0, juros: 0, valorTotal: 150, status: 'pago' },
+];
+
+export const DOCUMENTOS: DocumentoFinanceiro[] = [
+  { id: 1, tipo: 'prestacao_contas', titulo: 'Prestação de contas de setembro', arquivoUrl: 'https://exemplo.com/contas-09.pdf', competencia: '2026-09-01', publicadoEm: '2026-10-02T12:00:00Z' },
+];
+
+export const INADIMPLENCIA: InadimplenciaResumo = { totalUnidades: 2, unidadesInadimplentes: 1, percentualInadimplencia: 50, valorTotalEmAberto: 512.5 };
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -161,6 +175,29 @@ export const handlers = [
     return HttpResponse.json({ ...aviso, ...((await request.json()) as object) });
   }),
   http.delete(api('/avisos/:avisoId'), () => new HttpResponse(null, { status: 204 })),
+  http.get(api('/financeiro/cobrancas'), () => HttpResponse.json(pagina(COBRANCAS))),
+  http.get(api('/financeiro/cobrancas/:cobrancaId'), ({ params }) => {
+    const cobranca = COBRANCAS.find((item) => item.id === Number(params.cobrancaId));
+    return cobranca ? HttpResponse.json(cobranca) : problema(404, 'Cobrança não encontrada');
+  }),
+  http.get(api('/financeiro/cobrancas/:cobrancaId/pix'), ({ params }) => {
+    const cobranca = COBRANCAS.find((item) => item.id === Number(params.cobrancaId));
+    if (cobranca?.status === 'pago') return problema(409, 'Cobrança já está paga ou cancelada');
+    return HttpResponse.json({ codigoPix: '00020126580014br.gov.bcb.pix0136morah-cobranca-1520400005303986', expiraEm: new Date(Date.now() + 30 * 60 * 1000).toISOString() });
+  }),
+  http.post(api('/financeiro/cobrancas/:cobrancaId/baixa-manual'), ({ params }) => {
+    const cobranca = COBRANCAS.find((item) => item.id === Number(params.cobrancaId)) ?? COBRANCAS[0];
+    return HttpResponse.json({ ...cobranca, status: 'pago' });
+  }),
+  http.get(api('/financeiro/documentos'), () => HttpResponse.json(pagina(DOCUMENTOS))),
+  http.post(api('/financeiro/documentos'), async ({ request }) =>
+    HttpResponse.json({ id: 2, publicadoEm: '2026-10-14T12:00:00Z', ...((await request.json()) as object) }, { status: 201 }),
+  ),
+  http.post(api('/financeiro/taxas'), async ({ request }) => HttpResponse.json({ id: 7, ...((await request.json()) as Omit<Taxa, 'id'>) }, { status: 201 })),
+  http.post(api('/financeiro/taxas/:taxaId/gerar-cobrancas'), ({ params }) =>
+    HttpResponse.json({ taxaId: Number(params.taxaId), totalGeradas: 2, falhas: [] }, { status: 202 }),
+  ),
+  http.get(api('/financeiro/inadimplencia'), () => HttpResponse.json(INADIMPLENCIA)),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {
     const alteracoes = (await request.json()) as Partial<Personalizacao>;

@@ -4,6 +4,9 @@ import {
   ROTULOS_MODULO,
   ROTULOS_PERFIL,
   ROTULOS_PRIORIDADE_AVISO,
+  ROTULOS_STATUS_COBRANCA,
+  ROTULOS_TIPO_RATEIO,
+  TOM_STATUS_COBRANCA,
   ROTULOS_TIPO_NOTIFICACAO,
   ROTULOS_TIPO_PUBLICO_ALVO,
   TOM_PRIORIDADE_AVISO,
@@ -33,6 +36,12 @@ describe('rotulos', () => {
     expect(chaves(ROTULOS_PRIORIDADE_AVISO)).toEqual(['normal', 'urgente']);
     expect(chaves(TOM_PRIORIDADE_AVISO)).toEqual(['normal', 'urgente']);
     expect(chaves(ROTULOS_TIPO_PUBLICO_ALVO)).toEqual(['bloco', 'condominio', 'unidade']);
+  });
+
+  it('statusCobrancaETipoRateioDevemTerRotuloParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_STATUS_COBRANCA)).toEqual(['atrasado', 'cancelado', 'pago', 'pendente']);
+    expect(chaves(TOM_STATUS_COBRANCA)).toEqual(['atrasado', 'cancelado', 'pago', 'pendente']);
+    expect(chaves(ROTULOS_TIPO_RATEIO)).toEqual(['fracao_ideal', 'igualitario']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {

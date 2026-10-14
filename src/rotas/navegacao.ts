@@ -18,14 +18,15 @@ const PERFIL: ItemMenu = { rotulo: 'Perfil', caminho: '/perfil', icone: 'pessoa'
 const NOTIFICACOES: ItemMenu = { rotulo: 'Notificações', caminho: '/notificacoes', icone: 'sino' };
 const CONDOMINIO: ItemMenu = { rotulo: 'Condomínio', caminho: '/condominio', icone: 'condominio' };
 const AVISOS: ItemMenu = { rotulo: 'Avisos', caminho: '/avisos', icone: 'avisos', modulo: 'avisos' };
+const FINANCEIRO: ItemMenu = { rotulo: 'Financeiro', caminho: '/financeiro', icone: 'financeiro', modulo: 'financeiro' };
 
-const ABAS_MORADOR: ItemMenu[] = [INICIO, AVISOS, MAIS];
+const ABAS_MORADOR: ItemMenu[] = [INICIO, AVISOS, FINANCEIRO, MAIS];
 const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL];
 
 export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: ABAS_MORADOR,
   proprietario: ABAS_MORADOR,
-  sindico: [INICIO, AVISOS, CONDOMINIO, MAIS],
+  sindico: [INICIO, FINANCEIRO, AVISOS, CONDOMINIO, MAIS],
   portaria: [INICIO, MAIS],
 };
 
