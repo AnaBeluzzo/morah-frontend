@@ -1,5 +1,6 @@
 import type { Perfil } from '../tipos/login';
 import type { TipoNotificacao } from '../tipos/notificacoes';
+import type { ModuloCodigo } from '../tipos/personalizacao';
 
 // Rótulos em português dos enums do contrato: um mapa por enum, com o valor do contrato como
 // chave. O tipo Record<Enum, string> obriga (em tempo de compilação) a ter rótulo para todo valor.
@@ -32,4 +33,15 @@ export const ROTULOS_TIPO_NOTIFICACAO: Record<TipoNotificacao, string> = {
   financeiro: 'Financeiro',
   aviso: 'Aviso',
   reserva: 'Reserva',
+};
+
+// ---------------------------------------------------------------- Personalização
+
+export const ROTULOS_MODULO: Record<ModuloCodigo, string> = {
+  financeiro: 'Financeiro',
+  portaria: 'Portaria',
+  avisos: 'Avisos',
+  reservas: 'Reservas',
+  minha_unidade: 'Minha Unidade',
+  encomendas: 'Encomendas',
 };

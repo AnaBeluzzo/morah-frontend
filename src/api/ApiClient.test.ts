@@ -159,6 +159,7 @@ describe('ApiClient', () => {
   });
 
   it('deveTransformarFalhaDeRedeEmErroApiComStatusZero', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     servidor.use(http.get(api('/avisos'), () => HttpResponse.error()));
     const erro = (await cliente.get('/avisos').catch((e: unknown) => e)) as ErroApi;
     expect(erro.status).toBe(0);

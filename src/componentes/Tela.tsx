@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { useSessao } from '../contexto/SessaoContext';
+import { useTema } from '../contexto/TemaContext';
 import { Icone } from './Icone';
 import { SinoNotificacoes } from './SinoNotificacoes';
 import estilos from './Tela.module.css';
@@ -12,10 +13,12 @@ interface TelaProps {
   children: ReactNode;
 }
 
-/** Estrutura de toda tela: barra superior (voltar + título + sino) e o conteúdo. */
+/** Estrutura de toda tela: barra superior (voltar ou logo, nome do condomínio, título, sino) e o conteúdo. */
 export function Tela({ titulo, voltarPara, children }: TelaProps) {
   const navigate = useNavigate();
   const { sessao } = useSessao();
+  const { personalizacao } = useTema();
+  const logoUrl = personalizacao?.logoUrl;
 
   useEffect(() => {
     document.title = `${titulo} · Morah`;
@@ -34,12 +37,17 @@ export function Tela({ titulo, voltarPara, children }: TelaProps) {
   return (
     <>
       <header className={estilos.topo}>
-        {voltarPara && (
+        {voltarPara ? (
           <button type="button" className={estilos.botaoIcone} onClick={voltar} aria-label="Voltar">
             <Icone nome="voltar" />
           </button>
+        ) : (
+          logoUrl && <img className={estilos.logo} src={logoUrl} alt={`Logo de ${personalizacao.nomeExibicao}`} />
         )}
-        <h1 className={estilos.titulo}>{titulo}</h1>
+        <div className={estilos.titulos}>
+          {personalizacao && <span className={estilos.condominio}>{personalizacao.nomeExibicao}</span>}
+          <h1 className={estilos.titulo}>{titulo}</h1>
+        </div>
         {sessao && <SinoNotificacoes />}
       </header>
       <main className={estilos.conteudo}>{children}</main>

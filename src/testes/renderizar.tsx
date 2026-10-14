@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { ToastProvider } from '../componentes/Toast';
 import { SessaoProvider } from '../contexto/SessaoContext';
+import { TemaProvider } from '../contexto/TemaContext';
 import type { Perfil, PerfilDisponivel } from '../tipos/login';
 import { CONTEXTOS } from './handlers';
 
@@ -44,7 +45,9 @@ export function renderizar(ui: ReactElement, { rota = '/', caminho, perfil = 'mo
     <QueryClientProvider client={clienteQuery}>
       <MemoryRouter initialEntries={[rota]}>
         <ToastProvider>
-          <SessaoProvider>{conteudo}</SessaoProvider>
+          <SessaoProvider>
+            <TemaProvider>{conteudo}</TemaProvider>
+          </SessaoProvider>
         </ToastProvider>
       </MemoryRouter>
     </QueryClientProvider>,

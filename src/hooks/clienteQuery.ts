@@ -14,9 +14,15 @@ function deveRepetir(falhas: number, erro: unknown): boolean {
 
 /** Cliente do TanStack Query (cache, carregando, erro, recarregar) com log centralizado. */
 export function criarClienteQuery(): QueryClient {
-  return new QueryClient({
+  const clienteQuery: QueryClient = new QueryClient({
     queryCache: new QueryCache({
-      onError: (erro, consulta) => logger.warn('Consulta', `falhou ${JSON.stringify(consulta.queryKey)}: ${String(erro)}`),
+      onError: (erro, consulta) => {
+        logger.warn('Consulta', `falhou ${JSON.stringify(consulta.queryKey)}: ${String(erro)}`);
+        // 403 "Módulo X desativado": o síndico desligou o módulo agora; atualiza as abas
+        if (erro instanceof ErroApi && erro.moduloDesativado) {
+          void clienteQuery.invalidateQueries({ queryKey: ['modulos'] });
+        }
+      },
     }),
     mutationCache: new MutationCache({
       onError: (erro) => logger.warn('Mutação', `falhou: ${String(erro)}`),
@@ -26,4 +32,5 @@ export function criarClienteQuery(): QueryClient {
       mutations: { retry: false },
     },
   });
+  return clienteQuery;
 }

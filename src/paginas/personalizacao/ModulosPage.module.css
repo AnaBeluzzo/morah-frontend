@@ -1,0 +1,56 @@
+.modulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  padding: 0 var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.modulo span {
+  display: flex;
+  flex-direction: column;
+}
+
+.modulo small {
+  color: var(--cor-texto-suave);
+}
+
+/* chave liga/desliga desenhada sobre o checkbox nativo (continua acessível) */
+.modulo input {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 32px;
+  min-height: 32px;
+  border-radius: 16px;
+  background: var(--cor-borda);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.modulo input::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: left 0.15s;
+}
+
+.modulo input:checked {
+  background: var(--cor-primaria);
+}
+
+.modulo input:checked::after {
+  left: 23px;
+}

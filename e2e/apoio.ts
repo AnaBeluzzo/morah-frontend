@@ -124,7 +124,7 @@ export const SENHA_DEMO = 'demo123';
 export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
   morador: ['Início', 'Mais'],
   proprietario: ['Início', 'Mais'],
-  sindico: ['Início', 'Mais'],
+  sindico: ['Início', 'Condomínio', 'Mais'],
   portaria: ['Início', 'Mais'],
 };
 

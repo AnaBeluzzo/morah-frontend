@@ -5,6 +5,7 @@ import { http, HttpResponse } from 'msw';
 import type { Problem } from '../tipos/comum';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
 import type { Notificacao } from '../tipos/notificacoes';
+import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
 
 /** Caminho da API em qualquer origem (o ApiClient monta a URL a partir de window.location). */
 export function api(caminho: string): string {
@@ -54,6 +55,37 @@ export const NOTIFICACOES: Notificacao[] = [
   { id: 1, tipo: 'financeiro', titulo: 'Nova cobrança', referenciaId: 1, enviadaEm: '2026-10-01T12:00:00Z', lidaEm: '2026-10-02T12:00:00Z' },
 ];
 
+// ---------------------------------------------------------------- Personalização
+
+export const PERSONALIZACAO: Personalizacao = {
+  condominioId: 1,
+  nomeExibicao: 'Condomínio Demo',
+  logoUrl: null,
+  corPrimaria: '#1F4E79',
+  corSecundaria: '#F2F4F7',
+  corDestaque: '#F59E0B',
+  atualizadoEm: '2026-10-01T12:00:00Z',
+};
+
+const NOMES_MODULOS: Record<ModuloCodigo, string> = {
+  financeiro: 'Financeiro',
+  portaria: 'Portaria',
+  avisos: 'Avisos',
+  reservas: 'Reservas',
+  minha_unidade: 'Minha Unidade',
+  encomendas: 'Encomendas',
+};
+
+/** Os seis módulos; os passados em `desativados` vêm com `ativo: false`. */
+export function modulos(...desativados: ModuloCodigo[]): ModuloCondominio[] {
+  return (Object.keys(NOMES_MODULOS) as ModuloCodigo[]).map((modulo) => ({
+    modulo,
+    nome: NOMES_MODULOS[modulo],
+    ativo: !desativados.includes(modulo),
+    atualizadoEm: '2026-10-01T12:00:00Z',
+  }));
+}
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -81,6 +113,17 @@ export const handlers = [
   http.get(api('/notificacoes'), ({ request }) => {
     const page = Number(new URL(request.url).searchParams.get('page') ?? 0);
     return HttpResponse.json(page === 0 ? NOTIFICACOES : []);
+  }),
+  http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
+  http.patch(api('/condominio/personalizacao'), async ({ request }) => {
+    const alteracoes = (await request.json()) as Partial<Personalizacao>;
+    return HttpResponse.json({ ...PERSONALIZACAO, ...alteracoes, atualizadoEm: '2026-10-14T12:00:00Z' });
+  }),
+  http.get(api('/condominio/modulos'), () => HttpResponse.json(modulos())),
+  http.patch(api('/condominio/modulos/:modulo'), async ({ params, request }) => {
+    const { ativo } = (await request.json()) as { ativo: boolean };
+    const modulo = params.modulo as ModuloCodigo;
+    return HttpResponse.json({ modulo, nome: NOMES_MODULOS[modulo], ativo, atualizadoEm: '2026-10-14T12:00:00Z' });
   }),
   http.patch(api('/notificacoes/:notificacaoId/lida'), ({ params }) => {
     const notificacao = NOTIFICACOES.find((item) => item.id === Number(params.notificacaoId));

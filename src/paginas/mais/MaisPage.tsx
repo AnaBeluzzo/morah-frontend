@@ -2,14 +2,16 @@ import { Link } from 'react-router';
 import { Icone } from '../../componentes/Icone';
 import { Tela } from '../../componentes/Tela';
 import { useContextoAtivo, useSessao } from '../../contexto/SessaoContext';
-import { ITENS_MAIS_POR_PERFIL } from '../../rotas/navegacao';
+import { useTema } from '../../contexto/TemaContext';
+import { itensVisiveis, ITENS_MAIS_POR_PERFIL } from '../../rotas/navegacao';
 import estilos from './MaisPage.module.css';
 
 /** Aba "Mais": o que não cabe nas abas inferiores do perfil. */
 export function MaisPage() {
   const contexto = useContextoAtivo();
   const { sessao } = useSessao();
-  const itens = [...ITENS_MAIS_POR_PERFIL[contexto.perfil]];
+  const { moduloAtivo } = useTema();
+  const itens = itensVisiveis(ITENS_MAIS_POR_PERFIL[contexto.perfil], moduloAtivo);
   if ((sessao?.perfisDisponiveis.length ?? 0) > 1) {
     itens.push({ rotulo: 'Trocar perfil', caminho: '/perfil/trocar', icone: 'pessoa' });
   }

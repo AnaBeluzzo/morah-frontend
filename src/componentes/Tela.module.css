@@ -12,15 +12,37 @@
   color: var(--cor-primaria-texto);
 }
 
-.titulo {
+.titulos {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 8px;
+}
+
+.condominio {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.titulo {
   margin: 0;
-  padding: 0 8px;
   font-size: 1.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  margin-left: 4px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #ffffff;
 }
 
 .botaoIcone {

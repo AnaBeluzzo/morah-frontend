@@ -49,3 +49,11 @@ export function aplicarCores(cores: CoresTema, raiz: HTMLElement = document.docu
     }
   }
 }
+
+/** Volta ao tema padrão do global.css (ex.: depois do logout). */
+export function limparCores(raiz: HTMLElement = document.documentElement): void {
+  for (const variavel of ['--cor-primaria', '--cor-secundaria', '--cor-destaque']) {
+    raiz.style.removeProperty(variavel);
+    raiz.style.removeProperty(`${variavel}-texto`);
+  }
+}
