@@ -12,9 +12,10 @@ export interface ItemMenu {
 const INICIO: ItemMenu = { rotulo: 'Início', caminho: '/', icone: 'inicio' };
 const MAIS: ItemMenu = { rotulo: 'Mais', caminho: '/mais', icone: 'mais' };
 const PERFIL: ItemMenu = { rotulo: 'Perfil', caminho: '/perfil', icone: 'pessoa' };
+const NOTIFICACOES: ItemMenu = { rotulo: 'Notificações', caminho: '/notificacoes', icone: 'sino' };
 
 const ABAS_MORADOR: ItemMenu[] = [INICIO, MAIS];
-const MAIS_MORADOR: ItemMenu[] = [PERFIL];
+const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL];
 
 export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: ABAS_MORADOR,
@@ -26,8 +27,8 @@ export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
 export const ITENS_MAIS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: MAIS_MORADOR,
   proprietario: MAIS_MORADOR,
-  sindico: [PERFIL],
-  portaria: [PERFIL],
+  sindico: [NOTIFICACOES, PERFIL],
+  portaria: [NOTIFICACOES, PERFIL],
 };
 
 /** `proprietario` é cumulativo a `morador`: onde o morador entra, o proprietário também. */

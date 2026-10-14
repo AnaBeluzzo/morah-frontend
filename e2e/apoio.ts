@@ -2,7 +2,7 @@
 // - sem rolagem horizontal (document.documentElement.scrollWidth <= window.innerWidth);
 // - sem erro no console nem exceção de JavaScript;
 // - sem requisição com falha inesperada (o 4xx esperado é declarado no próprio teste).
-import { test as base, expect, type BrowserContext, type Page } from '@playwright/test';
+import { test as base, expect, type APIRequestContext, type BrowserContext, type Page } from '@playwright/test';
 
 export { expect };
 
@@ -154,4 +154,45 @@ export async function abrirNoMais(pagina: Page, item: string): Promise<void> {
 
 export function titulo(pagina: Page) {
   return pagina.getByRole('heading', { level: 1 });
+}
+
+/**
+ * Preparação de dados direto na API (ex.: limpar as notificações antes de contar o selo).
+ * Só para montar o cenário: as telas sempre são testadas pela interface, entrando pelo login.
+ */
+export async function apiComo(request: APIRequestContext, perfil: PerfilDemo) {
+  const login = await request.post('/v1/auth/login', { data: { email: USUARIOS[perfil].email, senha: SENHA_DEMO } });
+  expect(login.ok()).toBe(true);
+  const { accessToken } = (await login.json()) as { accessToken: string };
+  const headers = { Authorization: `Bearer ${accessToken}` };
+  async function corpo(resposta: Awaited<ReturnType<APIRequestContext['get']>>) {
+    expect(resposta.ok(), `${resposta.url()} respondeu ${resposta.status()}`).toBe(true);
+    const texto = await resposta.text();
+    return texto ? JSON.parse(texto) : undefined;
+  }
+  return {
+    get: async (caminho: string) => corpo(await request.get(`/v1${caminho}`, { headers })),
+    post: async (caminho: string, data?: unknown) => corpo(await request.post(`/v1${caminho}`, { headers, data })),
+    patch: async (caminho: string, data?: unknown) => corpo(await request.patch(`/v1${caminho}`, { headers, data })),
+    delete: async (caminho: string) => corpo(await request.delete(`/v1${caminho}`, { headers })),
+  };
+}
+
+/** Marca como lidas todas as notificações da pessoa (cenário limpo para contar o selo do sino). */
+export async function lerTodasAsNotificacoes(request: APIRequestContext, perfil: PerfilDemo): Promise<void> {
+  const cliente = await apiComo(request, perfil);
+  for (let pagina = 0; ; pagina++) {
+    const notificacoes = (await cliente.get(`/notificacoes?page=${pagina}&size=100`)) as { id: number; lidaEm?: string }[];
+    for (const notificacao of notificacoes.filter((item) => !item.lidaEm)) {
+      await cliente.patch(`/notificacoes/${notificacao.id}/lida`);
+    }
+    if (notificacoes.length < 100) {
+      return;
+    }
+  }
+}
+
+/** Sino da barra superior (o nome acessível traz a contagem de não lidas). */
+export function sino(pagina: Page) {
+  return pagina.getByRole('banner').getByRole('link', { name: /^Notificações/ });
 }

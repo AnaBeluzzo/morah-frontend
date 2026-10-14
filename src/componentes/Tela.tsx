@@ -1,6 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
+import { useSessao } from '../contexto/SessaoContext';
 import { Icone } from './Icone';
+import { SinoNotificacoes } from './SinoNotificacoes';
 import estilos from './Tela.module.css';
 
 interface TelaProps {
@@ -10,9 +12,10 @@ interface TelaProps {
   children: ReactNode;
 }
 
-/** Estrutura de toda tela: barra superior (voltar + título) e o conteúdo. */
+/** Estrutura de toda tela: barra superior (voltar + título + sino) e o conteúdo. */
 export function Tela({ titulo, voltarPara, children }: TelaProps) {
   const navigate = useNavigate();
+  const { sessao } = useSessao();
 
   useEffect(() => {
     document.title = `${titulo} · Morah`;
@@ -37,6 +40,7 @@ export function Tela({ titulo, voltarPara, children }: TelaProps) {
           </button>
         )}
         <h1 className={estilos.titulo}>{titulo}</h1>
+        {sessao && <SinoNotificacoes />}
       </header>
       <main className={estilos.conteudo}>{children}</main>
     </>

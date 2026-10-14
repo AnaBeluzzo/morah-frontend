@@ -8,6 +8,7 @@ import { LoginPage } from '../paginas/login/LoginPage';
 import { PerfilPage } from '../paginas/login/PerfilPage';
 import { TrocarPerfilPage } from '../paginas/login/TrocarPerfilPage';
 import { MaisPage } from '../paginas/mais/MaisPage';
+import { NotificacoesPage } from '../paginas/notificacoes/NotificacoesPage';
 import { ABAS_POR_PERFIL } from './navegacao';
 import { RotaProtegida, RotaPublica } from './RotaProtegida';
 
@@ -47,6 +48,7 @@ export function Rotas() {
         <Route path="mais" element={<MaisPage />} />
         <Route path="perfil" element={<PerfilPage />} />
         <Route path="perfil/trocar" element={<TrocarPerfilPage />} />
+        <Route path="notificacoes" element={<NotificacoesPage />} />
         <Route path="*" element={<PaginaNaoEncontrada />} />
       </Route>
     </Routes>

@@ -4,6 +4,7 @@
 import { http, HttpResponse } from 'msw';
 import type { Problem } from '../tipos/comum';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
+import type { Notificacao } from '../tipos/notificacoes';
 
 /** Caminho da API em qualquer origem (o ApiClient monta a URL a partir de window.location). */
 export function api(caminho: string): string {
@@ -44,6 +45,15 @@ export const ME_PROPRIETARIO: MeResponse = {
   contextoAtivo: CONTEXTOS.proprietario,
 };
 
+// ---------------------------------------------------------------- Notificações
+
+export const NOTIFICACOES: Notificacao[] = [
+  { id: 3, tipo: 'aviso', titulo: 'Novo aviso: Manutenção da piscina', mensagem: 'A piscina fecha na segunda.', referenciaId: 1, enviadaEm: '2026-10-05T12:00:00Z' },
+  // convite de inquilino: chega sem `tipo`
+  { id: 2, titulo: 'Convite de acesso', mensagem: 'Você foi cadastrado como inquilino.', enviadaEm: '2026-10-04T12:00:00Z' },
+  { id: 1, tipo: 'financeiro', titulo: 'Nova cobrança', referenciaId: 1, enviadaEm: '2026-10-01T12:00:00Z', lidaEm: '2026-10-02T12:00:00Z' },
+];
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -67,4 +77,13 @@ export const handlers = [
     return HttpResponse.json({ accessToken: 'access-contexto', refreshToken: 'refresh-contexto', tokenType: 'Bearer', expiresIn: 3600, contexto: CONTEXTOS[perfil] });
   }),
   http.post(api('/auth/logout'), () => new HttpResponse(null, { status: 204 })),
+
+  http.get(api('/notificacoes'), ({ request }) => {
+    const page = Number(new URL(request.url).searchParams.get('page') ?? 0);
+    return HttpResponse.json(page === 0 ? NOTIFICACOES : []);
+  }),
+  http.patch(api('/notificacoes/:notificacaoId/lida'), ({ params }) => {
+    const notificacao = NOTIFICACOES.find((item) => item.id === Number(params.notificacaoId));
+    return notificacao ? HttpResponse.json({ ...notificacao, lidaEm: '2026-10-14T12:00:00Z' }) : problema(404, 'Notificação não encontrada');
+  }),
 ];
