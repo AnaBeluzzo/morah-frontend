@@ -1,0 +1,105 @@
+/* Estilos compartilhados pelas telas (listas, filtros, detalhes e ações). */
+
+.filtros {
+  padding: 0 var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.filtros summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filtros[open] {
+  padding-bottom: var(--espaco);
+}
+
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.naoLido {
+  font-weight: 800;
+}
+
+.suave {
+  color: var(--cor-texto-suave);
+  font-size: 0.9375rem;
+}
+
+.acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conteudo {
+  white-space: pre-wrap;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.valor {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.codigo {
+  display: block;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--cor-neutro-fundo);
+  color: var(--cor-texto);
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.codigoGrande {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+.opcaoCheck {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.indicador {
+  padding: var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.indicador strong {
+  display: block;
+  font-size: 1.5rem;
+}

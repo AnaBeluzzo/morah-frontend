@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { rotular, ROTULOS_MODULO, ROTULOS_PERFIL, ROTULOS_TIPO_NOTIFICACAO } from './rotulos';
+import {
+  rotular,
+  ROTULOS_MODULO,
+  ROTULOS_PERFIL,
+  ROTULOS_PRIORIDADE_AVISO,
+  ROTULOS_TIPO_NOTIFICACAO,
+  ROTULOS_TIPO_PUBLICO_ALVO,
+  TOM_PRIORIDADE_AVISO,
+} from './rotulos';
 
 // Cada mapa é conferido com a lista de valores do enum no contrato (morah-openapi.yaml).
 function chaves(mapa: Record<string, string>): string[] {
@@ -19,6 +27,12 @@ describe('rotulos', () => {
 
   it('tipoNotificacaoDeveTerRotuloParaTodoValorDoContrato', () => {
     expect(chaves(ROTULOS_TIPO_NOTIFICACAO)).toEqual(['aviso', 'encomenda', 'financeiro', 'portaria', 'reserva']);
+  });
+
+  it('prioridadeAvisoDeveTerRotuloETomParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_PRIORIDADE_AVISO)).toEqual(['normal', 'urgente']);
+    expect(chaves(TOM_PRIORIDADE_AVISO)).toEqual(['normal', 'urgente']);
+    expect(chaves(ROTULOS_TIPO_PUBLICO_ALVO)).toEqual(['bloco', 'condominio', 'unidade']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {

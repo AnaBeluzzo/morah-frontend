@@ -17,14 +17,15 @@ const MAIS: ItemMenu = { rotulo: 'Mais', caminho: '/mais', icone: 'mais' };
 const PERFIL: ItemMenu = { rotulo: 'Perfil', caminho: '/perfil', icone: 'pessoa' };
 const NOTIFICACOES: ItemMenu = { rotulo: 'Notificações', caminho: '/notificacoes', icone: 'sino' };
 const CONDOMINIO: ItemMenu = { rotulo: 'Condomínio', caminho: '/condominio', icone: 'condominio' };
+const AVISOS: ItemMenu = { rotulo: 'Avisos', caminho: '/avisos', icone: 'avisos', modulo: 'avisos' };
 
-const ABAS_MORADOR: ItemMenu[] = [INICIO, MAIS];
+const ABAS_MORADOR: ItemMenu[] = [INICIO, AVISOS, MAIS];
 const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL];
 
 export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: ABAS_MORADOR,
   proprietario: ABAS_MORADOR,
-  sindico: [INICIO, CONDOMINIO, MAIS],
+  sindico: [INICIO, AVISOS, CONDOMINIO, MAIS],
   portaria: [INICIO, MAIS],
 };
 
@@ -32,7 +33,7 @@ export const ITENS_MAIS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: MAIS_MORADOR,
   proprietario: MAIS_MORADOR,
   sindico: [NOTIFICACOES, PERFIL],
-  portaria: [NOTIFICACOES, PERFIL],
+  portaria: [NOTIFICACOES, PERFIL, AVISOS],
 };
 
 /** Esconde do menu os itens de módulos desativados no condomínio. */

@@ -1,3 +1,4 @@
+import type { PrioridadeAviso, TipoPublicoAlvo } from '../tipos/avisos';
 import type { Perfil } from '../tipos/login';
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
@@ -44,4 +45,22 @@ export const ROTULOS_MODULO: Record<ModuloCodigo, string> = {
   reservas: 'Reservas',
   minha_unidade: 'Minha Unidade',
   encomendas: 'Encomendas',
+};
+
+// ---------------------------------------------------------------- Avisos
+
+export const ROTULOS_PRIORIDADE_AVISO: Record<PrioridadeAviso, string> = {
+  normal: 'Normal',
+  urgente: 'Urgente',
+};
+
+export const TOM_PRIORIDADE_AVISO: Record<PrioridadeAviso, TomSelo> = {
+  normal: 'neutro',
+  urgente: 'perigo',
+};
+
+export const ROTULOS_TIPO_PUBLICO_ALVO: Record<TipoPublicoAlvo, string> = {
+  condominio: 'Todo o condomínio',
+  bloco: 'Um bloco',
+  unidade: 'Uma unidade',
 };

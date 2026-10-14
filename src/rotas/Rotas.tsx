@@ -4,6 +4,9 @@ import { LayoutApp } from '../componentes/LayoutApp';
 import { Tela } from '../componentes/Tela';
 import { useContextoAtivo } from '../contexto/SessaoContext';
 import { useTema } from '../contexto/TemaContext';
+import { AvisoPage } from '../paginas/avisos/AvisoPage';
+import { FormularioAvisoPage } from '../paginas/avisos/FormularioAvisoPage';
+import { MuralPage } from '../paginas/avisos/MuralPage';
 import { InicioPage } from '../paginas/inicio/InicioPage';
 import { LoginPage } from '../paginas/login/LoginPage';
 import { PerfilPage } from '../paginas/login/PerfilPage';
@@ -54,6 +57,10 @@ export function Rotas() {
         <Route path="perfil" element={<PerfilPage />} />
         <Route path="perfil/trocar" element={<TrocarPerfilPage />} />
         <Route path="notificacoes" element={<NotificacoesPage />} />
+        <Route path="avisos" element={<RotaProtegida modulo="avisos"><MuralPage /></RotaProtegida>} />
+        <Route path="avisos/novo" element={<RotaProtegida perfis={['sindico']} modulo="avisos"><FormularioAvisoPage /></RotaProtegida>} />
+        <Route path="avisos/:avisoId" element={<RotaProtegida modulo="avisos"><AvisoPage /></RotaProtegida>} />
+        <Route path="avisos/:avisoId/editar" element={<RotaProtegida perfis={['sindico']} modulo="avisos"><FormularioAvisoPage /></RotaProtegida>} />
         <Route path="condominio" element={<RotaProtegida perfis={['sindico']}><CondominioPage /></RotaProtegida>} />
         <Route path="condominio/identidade" element={<RotaProtegida perfis={['sindico']}><IdentidadeVisualPage /></RotaProtegida>} />
         <Route path="condominio/modulos" element={<RotaProtegida perfis={['sindico']}><ModulosPage /></RotaProtegida>} />

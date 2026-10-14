@@ -122,9 +122,9 @@ export const SENHA_DEMO = 'demo123';
 
 /** Abas inferiores que cada perfil deve ver (com todos os módulos ativos). */
 export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
-  morador: ['Início', 'Mais'],
-  proprietario: ['Início', 'Mais'],
-  sindico: ['Início', 'Condomínio', 'Mais'],
+  morador: ['Início', 'Avisos', 'Mais'],
+  proprietario: ['Início', 'Avisos', 'Mais'],
+  sindico: ['Início', 'Avisos', 'Condomínio', 'Mais'],
   portaria: ['Início', 'Mais'],
 };
 

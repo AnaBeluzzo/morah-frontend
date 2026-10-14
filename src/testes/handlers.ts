@@ -2,6 +2,7 @@
 // exemplos e schemas do contrato morah-openapi.yaml. Cada teste pode sobrescrever um handler
 // com `servidor.use(...)`.
 import { http, HttpResponse } from 'msw';
+import type { Aviso } from '../tipos/avisos';
 import type { Problem } from '../tipos/comum';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
 import type { Notificacao } from '../tipos/notificacoes';
@@ -86,6 +87,36 @@ export function modulos(...desativados: ModuloCodigo[]): ModuloCondominio[] {
   }));
 }
 
+// ---------------------------------------------------------------- Avisos
+
+export const AVISOS: Aviso[] = [
+  {
+    id: 2,
+    titulo: 'Falta de água',
+    conteudo: 'Manutenção na caixa d\'água das 8h às 12h.',
+    categoria: 'manutencao',
+    prioridade: 'urgente',
+    publicoAlvo: { tipo: 'condominio' },
+    autor: { id: 1, nome: 'Helena Prado' },
+    publicadoEm: '2026-10-05T12:00:00Z',
+    lidoPeloUsuario: false,
+  },
+  {
+    id: 1,
+    titulo: 'Bem-vindos ao Morah',
+    conteudo: 'Este é o novo canal de comunicação do condomínio.',
+    categoria: 'geral',
+    prioridade: 'normal',
+    publicoAlvo: { tipo: 'condominio' },
+    autor: { id: 1, nome: 'Helena Prado' },
+    publicadoEm: '2026-10-01T12:00:00Z',
+    lidoPeloUsuario: true,
+  },
+];
+
+/** Aviso que já saiu de vigência: o GET responde 410. */
+export const ID_AVISO_EXPIRADO = 99;
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -114,6 +145,22 @@ export const handlers = [
     const page = Number(new URL(request.url).searchParams.get('page') ?? 0);
     return HttpResponse.json(page === 0 ? NOTIFICACOES : []);
   }),
+  http.get(api('/avisos'), () => HttpResponse.json(pagina(AVISOS))),
+  http.get(api('/avisos/:avisoId'), ({ params }) => {
+    const id = Number(params.avisoId);
+    if (id === ID_AVISO_EXPIRADO) return problema(410, 'Aviso fora de vigência');
+    const aviso = AVISOS.find((item) => item.id === id);
+    return aviso ? HttpResponse.json({ ...aviso, lidoPeloUsuario: true }) : problema(404, 'Aviso não encontrado');
+  }),
+  http.post(api('/avisos'), async ({ request }) => {
+    const dados = (await request.json()) as Partial<Aviso>;
+    return HttpResponse.json({ ...AVISOS[1], ...dados, id: 10, publicadoEm: '2026-10-14T12:00:00Z' }, { status: 201 });
+  }),
+  http.patch(api('/avisos/:avisoId'), async ({ params, request }) => {
+    const aviso = AVISOS.find((item) => item.id === Number(params.avisoId)) ?? AVISOS[0];
+    return HttpResponse.json({ ...aviso, ...((await request.json()) as object) });
+  }),
+  http.delete(api('/avisos/:avisoId'), () => new HttpResponse(null, { status: 204 })),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {
     const alteracoes = (await request.json()) as Partial<Personalizacao>;
