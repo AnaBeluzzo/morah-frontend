@@ -1,9 +1,9 @@
 import { expect, test } from './apoio';
 
-test('deveMostrarOLayoutMobileComBarraDeAbasSemRolagemHorizontal', async ({ page }) => {
+test('semSessaoDeveAbrirOLoginSemRolagemHorizontal', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Início' })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: 'Navegação principal' })).toBeVisible();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole('heading', { name: 'Entrar' })).toBeVisible();
 
   const larguras = await page.evaluate(() => ({ conteudo: document.documentElement.scrollWidth, tela: window.innerWidth }));
   expect(larguras.conteudo).toBeLessThanOrEqual(larguras.tela);

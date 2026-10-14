@@ -1,0 +1,29 @@
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 var(--espaco);
+  text-decoration: none;
+  border-bottom: 1px solid var(--cor-neutro-fundo);
+}
+
+.lista li:last-child .item {
+  border-bottom: none;
+}
+
+.item span {
+  flex: 1;
+  min-width: 0;
+}

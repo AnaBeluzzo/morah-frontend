@@ -106,3 +106,52 @@ export const test = base.extend<{ monitor: Monitor; novaPagina: () => Promise<Pa
 export function sufixoUnico(): string {
   return `${Date.now()}`.slice(-7);
 }
+
+// ---------------------------------------------------------------- usuários de demonstração (seed)
+
+export type PerfilDemo = 'sindico' | 'proprietario' | 'morador' | 'portaria';
+
+export const USUARIOS: Record<PerfilDemo, { email: string; nome: string }> = {
+  sindico: { email: 'helena.prado@demo.com.br', nome: 'Helena Prado' },
+  proprietario: { email: 'rafael.nunes@demo.com.br', nome: 'Rafael Nunes' },
+  morador: { email: 'camila.duarte@demo.com.br', nome: 'Camila Duarte' },
+  portaria: { email: 'portaria@demo.com.br', nome: 'Portaria Central' },
+};
+
+export const SENHA_DEMO = 'demo123';
+
+/** Abas inferiores que cada perfil deve ver (com todos os módulos ativos). */
+export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
+  morador: ['Início', 'Mais'],
+  proprietario: ['Início', 'Mais'],
+  sindico: ['Início', 'Mais'],
+  portaria: ['Início', 'Mais'],
+};
+
+/** Entra pela tela de login, como uma pessoa faria (nada de injetar token). */
+export async function entrar(pagina: Page, perfil: PerfilDemo): Promise<void> {
+  await pagina.goto('/login');
+  await pagina.getByLabel('E-mail').fill(USUARIOS[perfil].email);
+  await pagina.getByRole('textbox', { name: 'Senha', exact: true }).fill(SENHA_DEMO);
+  await pagina.getByRole('button', { name: 'Entrar' }).click();
+  await expect(barraDeAbas(pagina)).toBeVisible();
+}
+
+export function barraDeAbas(pagina: Page) {
+  return pagina.getByRole('navigation', { name: 'Navegação principal' });
+}
+
+/** Toca numa aba inferior e espera o título da tela. */
+export async function abrirAba(pagina: Page, aba: string): Promise<void> {
+  await barraDeAbas(pagina).getByRole('link', { name: aba, exact: true }).click();
+}
+
+/** Abre um item da aba "Mais". */
+export async function abrirNoMais(pagina: Page, item: string): Promise<void> {
+  await abrirAba(pagina, 'Mais');
+  await pagina.getByRole('navigation', { name: 'Mais opções' }).getByRole('link', { name: item, exact: true }).click();
+}
+
+export function titulo(pagina: Page) {
+  return pagina.getByRole('heading', { level: 1 });
+}
