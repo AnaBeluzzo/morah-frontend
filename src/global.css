@@ -1,0 +1,176 @@
+/* Tema: todas as cores do app vêm destas variáveis. As três cores do condomínio (e o texto
+   legível sobre cada uma) são trocadas em tempo de execução por utils/cores.ts. */
+:root {
+  --cor-primaria: #1f4e79;
+  --cor-primaria-texto: #ffffff;
+  --cor-secundaria: #f2f4f7;
+  --cor-secundaria-texto: #111827;
+  --cor-destaque: #f59e0b;
+  --cor-destaque-texto: #111827;
+
+  --cor-fundo-externo: #d9dde3;
+  --cor-superficie: #ffffff;
+  --cor-texto: #111827;
+  --cor-texto-suave: #4b5563;
+  --cor-borda: #d1d5db;
+
+  --cor-sucesso: #065f46;
+  --cor-sucesso-fundo: #d1fae5;
+  --cor-alerta: #92400e;
+  --cor-alerta-fundo: #fef3c7;
+  --cor-perigo: #b91c1c;
+  --cor-perigo-fundo: #fee2e2;
+  --cor-info: #1e40af;
+  --cor-info-fundo: #dbeafe;
+  --cor-neutro: #374151;
+  --cor-neutro-fundo: #e5e7eb;
+
+  --raio: 12px;
+  --espaco: 16px;
+  --largura-maxima: 480px;
+  --altura-abas: 64px;
+  --sombra: 0 1px 3px rgb(0 0 0 / 0.12);
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--cor-texto);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* fora da coluna do app (telas largas) o fundo é neutro */
+  background: var(--cor-fundo-externo);
+}
+
+/* Coluna única do app: mobile-first; em telas largas fica centralizada com no máximo 480 px. */
+#root {
+  max-width: var(--largura-maxima);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--cor-secundaria);
+  color: var(--cor-secundaria-texto);
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin: 0 0 8px;
+}
+
+h2 {
+  font-size: 1.125rem;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0 0 8px;
+}
+
+a {
+  color: inherit;
+}
+
+/* Textos longos (códigos PIX, URLs, nomes) quebram em vez de criar rolagem horizontal. */
+p,
+dd,
+li,
+h1,
+h2,
+h3,
+span,
+code {
+  overflow-wrap: anywhere;
+}
+
+/* Inputs com fonte de 16 px (evita o zoom automático do iOS) e alvo de toque de 44 px. */
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--cor-texto);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input[type='checkbox'] {
+  width: 24px;
+  min-height: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--cor-primaria);
+}
+
+input[type='color'] {
+  width: 56px;
+  padding: 4px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'],
+textarea[aria-invalid='true'] {
+  border-color: var(--cor-perigo);
+}
+
+button {
+  font: inherit;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+dl {
+  margin: 0;
+}
+
+.somente-leitor-de-tela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

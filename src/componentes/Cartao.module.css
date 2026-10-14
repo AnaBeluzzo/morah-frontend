@@ -1,0 +1,63 @@
+.cartao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda);
+  border-left: 4px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  min-width: 0;
+}
+
+.link {
+  min-height: 56px;
+  text-decoration: none;
+}
+
+.destaque {
+  border-left-color: var(--cor-destaque);
+}
+
+.conteudo {
+  flex: 1;
+  min-width: 0;
+}
+
+.conteudo > :last-child {
+  margin-bottom: 0;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dado {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cor-neutro-fundo);
+}
+
+.dado:last-child {
+  border-bottom: none;
+}
+
+.dado dt {
+  color: var(--cor-texto-suave);
+}
+
+.dado dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+  min-width: 0;
+}

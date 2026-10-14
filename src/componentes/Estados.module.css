@@ -1,0 +1,32 @@
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 4px solid var(--cor-borda);
+  border-top-color: var(--cor-primaria);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+.erroFormulario {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--cor-perigo-fundo);
+  color: var(--cor-perigo);
+  font-weight: 600;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

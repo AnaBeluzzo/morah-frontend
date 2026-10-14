@@ -23,6 +23,11 @@ export default defineConfig([
     rules: { 'react-refresh/only-export-components': 'off' },
   },
   {
+    // no Playwright, `use` é o parâmetro das fixtures, não o hook do React
+    files: ['e2e/**'],
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
+  },
+  {
     files: ['**/*.{js,mjs}'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },

@@ -1,0 +1,55 @@
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: var(--raio);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+
+.botao:disabled {
+  opacity: 0.6;
+}
+
+.primario {
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+}
+
+.secundario {
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-color: var(--cor-primaria);
+}
+
+.perigo {
+  background: var(--cor-perigo);
+  color: #ffffff;
+}
+
+.texto {
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.indicador {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

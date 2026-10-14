@@ -1,0 +1,23 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rotulo {
+  font-weight: 600;
+}
+
+.ajuda {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.erro {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cor-perigo);
+}

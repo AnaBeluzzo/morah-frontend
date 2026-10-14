@@ -14,5 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/testes/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
+    // datas e horas dos testes no mesmo fuso do e2e
+    env: { TZ: 'America/Sao_Paulo' },
   },
 });
