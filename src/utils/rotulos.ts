@@ -4,6 +4,7 @@ import type { Perfil } from '../tipos/login';
 import type { StatusSolicitacaoVinculo, TipoVinculo } from '../tipos/minhaUnidade';
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
+import type { StatusAcesso, StatusAutorizacaoVisita } from '../tipos/portaria';
 
 // Rótulos em português dos enums do contrato: um mapa por enum, com o valor do contrato como
 // chave. O tipo Record<Enum, string> obriga (em tempo de compilação) a ter rótulo para todo valor.
@@ -122,4 +123,30 @@ export const TOM_STATUS_SOLICITACAO_VINCULO: Record<StatusSolicitacaoVinculo, To
   pendente: 'alerta',
   aprovada: 'sucesso',
   rejeitada: 'perigo',
+};
+
+// ---------------------------------------------------------------- Portaria
+
+export const ROTULOS_STATUS_AUTORIZACAO_VISITA: Record<StatusAutorizacaoVisita, string> = {
+  pendente: 'Pendente',
+  autorizada: 'Autorizada',
+  recusada: 'Recusada',
+  expirada: 'Expirada',
+};
+
+export const TOM_STATUS_AUTORIZACAO_VISITA: Record<StatusAutorizacaoVisita, TomSelo> = {
+  pendente: 'alerta',
+  autorizada: 'sucesso',
+  recusada: 'perigo',
+  expirada: 'neutro',
+};
+
+export const ROTULOS_STATUS_ACESSO: Record<StatusAcesso, string> = {
+  no_condominio: 'No condomínio',
+  saiu: 'Saiu',
+};
+
+export const TOM_STATUS_ACESSO: Record<StatusAcesso, TomSelo> = {
+  no_condominio: 'info',
+  saiu: 'neutro',
 };

@@ -4,7 +4,11 @@ import {
   ROTULOS_MODULO,
   ROTULOS_PERFIL,
   ROTULOS_PRIORIDADE_AVISO,
+  ROTULOS_STATUS_ACESSO,
+  ROTULOS_STATUS_AUTORIZACAO_VISITA,
   ROTULOS_STATUS_COBRANCA,
+  TOM_STATUS_ACESSO,
+  TOM_STATUS_AUTORIZACAO_VISITA,
   ROTULOS_STATUS_SOLICITACAO_VINCULO,
   ROTULOS_TIPO_VINCULO,
   TOM_STATUS_SOLICITACAO_VINCULO,
@@ -51,6 +55,13 @@ describe('rotulos', () => {
     expect(chaves(ROTULOS_TIPO_VINCULO)).toEqual(['dependente', 'inquilino', 'proprietario']);
     expect(chaves(ROTULOS_STATUS_SOLICITACAO_VINCULO)).toEqual(['aprovada', 'pendente', 'rejeitada']);
     expect(chaves(TOM_STATUS_SOLICITACAO_VINCULO)).toEqual(['aprovada', 'pendente', 'rejeitada']);
+  });
+
+  it('statusDaPortariaDevemTerRotuloETomParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_STATUS_AUTORIZACAO_VISITA)).toEqual(['autorizada', 'expirada', 'pendente', 'recusada']);
+    expect(chaves(TOM_STATUS_AUTORIZACAO_VISITA)).toEqual(['autorizada', 'expirada', 'pendente', 'recusada']);
+    expect(chaves(ROTULOS_STATUS_ACESSO)).toEqual(['no_condominio', 'saiu']);
+    expect(chaves(TOM_STATUS_ACESSO)).toEqual(['no_condominio', 'saiu']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {

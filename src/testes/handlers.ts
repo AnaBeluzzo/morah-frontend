@@ -9,6 +9,7 @@ import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/l
 import type { SolicitacaoVinculo, Unidade, VinculoUnidade } from '../tipos/minhaUnidade';
 import type { Notificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
+import type { Acesso, AutorizacaoVisita } from '../tipos/portaria';
 
 /** Caminho da API em qualquer origem (o ApiClient monta a URL a partir de window.location). */
 export function api(caminho: string): string {
@@ -146,6 +147,19 @@ export const SOLICITACOES: SolicitacaoVinculo[] = [
   { id: 4, unidadeId: 1, tipoVinculo: 'dependente', nomeSolicitado: 'Lia Nunes', status: 'pendente', solicitadoEm: '2026-10-10T12:00:00Z' },
 ];
 
+// ---------------------------------------------------------------- Portaria
+
+export const AUTORIZACOES: AutorizacaoVisita[] = [
+  { id: 1, visitante: { id: 1, nome: 'Marcos Silva', documento: '12.345.678-9' }, unidadeId: 1, motivo: 'Visita', solicitadoEm: '2026-10-14T21:00:00Z', status: 'pendente' },
+  { id: 2, visitante: { id: 2, nome: 'Ana Costa' }, unidadeId: 1, motivo: 'Entrega', solicitadoEm: '2026-10-14T18:00:00Z', respondidoEm: '2026-10-14T18:05:00Z', status: 'autorizada' },
+  { id: 3, visitante: { id: 3, nome: 'Pedro Reis' }, unidadeId: 2, motivo: 'Serviço', solicitadoEm: '2026-10-13T12:00:00Z', status: 'expirada' },
+];
+
+export const ACESSOS: Acesso[] = [
+  { id: 1, autorizacaoId: 2, visitante: { id: 2, nome: 'Ana Costa' }, entrada: '2026-10-14T18:10:00Z', tipo: 'entrada', status: 'no_condominio' },
+  { id: 2, visitante: { id: 4, nome: 'Lucas Prado' }, entrada: '2026-10-13T10:00:00Z', saida: '2026-10-13T11:00:00Z', tipo: 'saida', status: 'saiu' },
+];
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -229,6 +243,30 @@ export const handlers = [
   http.patch(api('/unidades/:unidadeId/vinculos/solicitacoes/:solicitacaoId'), async ({ request }) => {
     const { decisao } = (await request.json()) as { decisao: string };
     return HttpResponse.json({ ...SOLICITACOES[0], status: decisao });
+  }),
+  http.post(api('/portaria/visitantes'), async ({ request }) => {
+    const dados = (await request.json()) as { unidadeId: number; visitante: { nome: string }; motivo: string };
+    if (dados.unidadeId !== 1 && dados.unidadeId !== 2) return problema(404, 'Unidade não encontrada');
+    return HttpResponse.json({ id: 9, visitante: { id: 9, ...dados.visitante }, unidadeId: dados.unidadeId, motivo: dados.motivo, solicitadoEm: '2026-10-14T21:30:00Z', status: 'pendente' }, { status: 201 });
+  }),
+  http.get(api('/portaria/autorizacoes'), () => HttpResponse.json(pagina(AUTORIZACOES))),
+  http.get(api('/portaria/autorizacoes/:autorizacaoId'), ({ params }) => {
+    const autorizacao = AUTORIZACOES.find((item) => item.id === Number(params.autorizacaoId));
+    return autorizacao ? HttpResponse.json(autorizacao) : problema(404, 'Autorização não encontrada');
+  }),
+  http.patch(api('/portaria/autorizacoes/:autorizacaoId/decisao'), async ({ request }) => {
+    const { decisao } = (await request.json()) as { decisao: string };
+    return HttpResponse.json({ ...AUTORIZACOES[0], status: decisao === 'autorizado' ? 'autorizada' : 'recusada', respondidoEm: '2026-10-14T21:05:00Z' });
+  }),
+  http.post(api('/portaria/autorizacoes/:autorizacaoId/reenviar'), () => new HttpResponse(null, { status: 202 })),
+  http.get(api('/portaria/acessos'), () => HttpResponse.json(pagina(ACESSOS))),
+  http.post(api('/portaria/acessos'), async ({ request }) => {
+    const dados = (await request.json()) as { visitanteId: number; tipo: string };
+    const saida = dados.tipo === 'saida';
+    return HttpResponse.json(
+      { id: 5, visitante: { id: dados.visitanteId, nome: 'Ana Costa' }, entrada: '2026-10-14T18:10:00Z', saida: saida ? '2026-10-14T19:00:00Z' : undefined, tipo: dados.tipo, status: saida ? 'saiu' : 'no_condominio' },
+      { status: 201 },
+    );
   }),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {

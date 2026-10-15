@@ -28,6 +28,10 @@ import { SolicitarVinculoPage } from '../paginas/minhaUnidade/SolicitarVinculoPa
 import { UnidadesPage } from '../paginas/minhaUnidade/UnidadesPage';
 import { NotificacoesPage } from '../paginas/notificacoes/NotificacoesPage';
 import { CondominioPage } from '../paginas/personalizacao/CondominioPage';
+import { AcessosPage } from '../paginas/portaria/AcessosPage';
+import { AutorizacaoPage } from '../paginas/portaria/AutorizacaoPage';
+import { AutorizacoesPage } from '../paginas/portaria/AutorizacoesPage';
+import { RegistrarVisitantePage } from '../paginas/portaria/RegistrarVisitantePage';
 import { IdentidadeVisualPage } from '../paginas/personalizacao/IdentidadeVisualPage';
 import { ModulosPage } from '../paginas/personalizacao/ModulosPage';
 import type { Perfil } from '../tipos/login';
@@ -40,6 +44,9 @@ const MORADOR_E_SINDICO: Perfil[] = ['morador', 'sindico'];
 const SINDICO: Perfil[] = ['sindico'];
 const MORADOR: Perfil[] = ['morador'];
 const PROPRIETARIO: Perfil[] = ['proprietario'];
+const PORTARIA: Perfil[] = ['portaria'];
+const PORTARIA_E_MORADOR: Perfil[] = ['portaria', 'morador'];
+const PORTARIA_E_SINDICO: Perfil[] = ['portaria', 'sindico'];
 
 interface TelaProtegida {
   caminho: string;
@@ -71,6 +78,11 @@ const TELAS_PROTEGIDAS: TelaProtegida[] = [
   { caminho: 'unidade/inquilinos', pagina: <InquilinosPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
   { caminho: 'unidade/inquilinos/novo', pagina: <CadastrarInquilinoPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
   { caminho: 'unidades', pagina: <UnidadesPage />, perfis: SINDICO, modulo: 'minha_unidade' },
+  // Portaria
+  { caminho: 'visitantes', pagina: <AutorizacoesPage />, perfis: PORTARIA_E_MORADOR, modulo: 'portaria' },
+  { caminho: 'visitantes/novo', pagina: <RegistrarVisitantePage />, perfis: PORTARIA, modulo: 'portaria' },
+  { caminho: 'visitantes/:autorizacaoId', pagina: <AutorizacaoPage />, perfis: PORTARIA_E_MORADOR, modulo: 'portaria' },
+  { caminho: 'acessos', pagina: <AcessosPage />, perfis: PORTARIA_E_SINDICO, modulo: 'portaria' },
   // Personalização (nunca desativada)
   { caminho: 'condominio', pagina: <CondominioPage />, perfis: SINDICO },
   { caminho: 'condominio/identidade', pagina: <IdentidadeVisualPage />, perfis: SINDICO },

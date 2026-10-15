@@ -21,22 +21,24 @@ const AVISOS: ItemMenu = { rotulo: 'Avisos', caminho: '/avisos', icone: 'avisos'
 const FINANCEIRO: ItemMenu = { rotulo: 'Financeiro', caminho: '/financeiro', icone: 'financeiro', modulo: 'financeiro' };
 const MINHA_UNIDADE: ItemMenu = { rotulo: 'Minha unidade', caminho: '/unidade', icone: 'unidade', modulo: 'minha_unidade' };
 const UNIDADES: ItemMenu = { rotulo: 'Unidades', caminho: '/unidades', icone: 'unidade', modulo: 'minha_unidade' };
+const VISITANTES: ItemMenu = { rotulo: 'Visitantes', caminho: '/visitantes', icone: 'visitantes', modulo: 'portaria' };
+const ACESSOS: ItemMenu = { rotulo: 'Histórico de acessos', caminho: '/acessos', icone: 'unidade', modulo: 'portaria' };
 
 const ABAS_MORADOR: ItemMenu[] = [INICIO, AVISOS, FINANCEIRO, MAIS];
-const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL, MINHA_UNIDADE];
+const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL, MINHA_UNIDADE, VISITANTES];
 
 export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: ABAS_MORADOR,
   proprietario: ABAS_MORADOR,
   sindico: [INICIO, FINANCEIRO, AVISOS, CONDOMINIO, MAIS],
-  portaria: [INICIO, MAIS],
+  portaria: [INICIO, VISITANTES, MAIS],
 };
 
 export const ITENS_MAIS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: MAIS_MORADOR,
   proprietario: MAIS_MORADOR,
-  sindico: [NOTIFICACOES, PERFIL, UNIDADES],
-  portaria: [NOTIFICACOES, PERFIL, AVISOS],
+  sindico: [NOTIFICACOES, PERFIL, UNIDADES, ACESSOS],
+  portaria: [NOTIFICACOES, PERFIL, AVISOS, ACESSOS],
 };
 
 /** Esconde do menu os itens de módulos desativados no condomínio. */
