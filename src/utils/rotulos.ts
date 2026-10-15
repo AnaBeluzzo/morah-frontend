@@ -1,4 +1,5 @@
 import type { PrioridadeAviso, TipoPublicoAlvo } from '../tipos/avisos';
+import type { StatusAutorizacaoRetirada, StatusEncomenda, StatusOcorrencia } from '../tipos/encomendas';
 import type { StatusCobranca, TipoRateio } from '../tipos/financeiro';
 import type { Perfil } from '../tipos/login';
 import type { StatusSolicitacaoVinculo, TipoVinculo } from '../tipos/minhaUnidade';
@@ -171,4 +172,30 @@ export const TOM_STATUS_RESERVA: Record<StatusReserva, TomSelo> = {
 export const ROTULOS_MOMENTO_VISTORIA: Record<MomentoVistoria, string> = {
   entrada: 'Entrada (antes do uso)',
   saida: 'Saída (depois do uso)',
+};
+
+// ---------------------------------------------------------------- Encomendas
+
+export const ROTULOS_STATUS_ENCOMENDA: Record<StatusEncomenda, string> = {
+  aguardando_retirada: 'Aguardando retirada',
+  retirada: 'Retirada',
+  extraviada: 'Extraviada',
+};
+
+export const TOM_STATUS_ENCOMENDA: Record<StatusEncomenda, TomSelo> = {
+  aguardando_retirada: 'alerta',
+  retirada: 'sucesso',
+  extraviada: 'perigo',
+};
+
+export const ROTULOS_STATUS_AUTORIZACAO_RETIRADA: Record<StatusAutorizacaoRetirada, string> = {
+  ativa: 'Ativa',
+  utilizada: 'Utilizada',
+  expirada: 'Expirada',
+};
+
+export const ROTULOS_STATUS_OCORRENCIA: Record<StatusOcorrencia, string> = {
+  aberta: 'Aberta',
+  em_andamento: 'Em andamento',
+  encerrada: 'Encerrada',
 };

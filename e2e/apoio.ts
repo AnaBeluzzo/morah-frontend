@@ -125,7 +125,7 @@ export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
   morador: ['Início', 'Avisos', 'Financeiro', 'Reservas', 'Mais'],
   proprietario: ['Início', 'Avisos', 'Financeiro', 'Reservas', 'Mais'],
   sindico: ['Início', 'Financeiro', 'Avisos', 'Condomínio', 'Mais'],
-  portaria: ['Início', 'Visitantes', 'Reservas', 'Mais'],
+  portaria: ['Início', 'Visitantes', 'Encomendas', 'Reservas', 'Mais'],
 };
 
 /** Entra pela tela de login, como uma pessoa faria (nada de injetar token). */

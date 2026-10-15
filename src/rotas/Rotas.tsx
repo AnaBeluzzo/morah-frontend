@@ -16,6 +16,12 @@ import { InadimplenciaPage } from '../paginas/financeiro/InadimplenciaPage';
 import { NovoDocumentoPage } from '../paginas/financeiro/NovoDocumentoPage';
 import { PixPage } from '../paginas/financeiro/PixPage';
 import { TaxasPage } from '../paginas/financeiro/TaxasPage';
+import { AutorizarTerceiroPage } from '../paginas/encomendas/AutorizarTerceiroPage';
+import { DetalheEncomendaPage } from '../paginas/encomendas/DetalheEncomendaPage';
+import { EncomendasPage } from '../paginas/encomendas/EncomendasPage';
+import { ExtravioPage } from '../paginas/encomendas/ExtravioPage';
+import { RegistrarEncomendaPage } from '../paginas/encomendas/RegistrarEncomendaPage';
+import { RetiradaPage } from '../paginas/encomendas/RetiradaPage';
 import { InicioPage } from '../paginas/inicio/InicioPage';
 import { LoginPage } from '../paginas/login/LoginPage';
 import { PerfilPage } from '../paginas/login/PerfilPage';
@@ -94,6 +100,13 @@ const TELAS_PROTEGIDAS: TelaProtegida[] = [
   { caminho: 'reservas/areas/:areaComumId/reservar', pagina: <NovaReservaPage />, perfis: MORADOR, modulo: 'reservas' },
   { caminho: 'reservas/:reservaId', pagina: <DetalheReservaPage />, modulo: 'reservas' },
   { caminho: 'reservas/:reservaId/vistoria', pagina: <VistoriaPage />, perfis: PORTARIA, modulo: 'reservas' },
+  // Encomendas
+  { caminho: 'encomendas', pagina: <EncomendasPage />, modulo: 'encomendas' },
+  { caminho: 'encomendas/nova', pagina: <RegistrarEncomendaPage />, perfis: PORTARIA, modulo: 'encomendas' },
+  { caminho: 'encomendas/:encomendaId', pagina: <DetalheEncomendaPage />, modulo: 'encomendas' },
+  { caminho: 'encomendas/:encomendaId/retirada', pagina: <RetiradaPage />, perfis: PORTARIA, modulo: 'encomendas' },
+  { caminho: 'encomendas/:encomendaId/autorizar-terceiro', pagina: <AutorizarTerceiroPage />, perfis: MORADOR, modulo: 'encomendas' },
+  { caminho: 'encomendas/:encomendaId/extravio', pagina: <ExtravioPage />, perfis: MORADOR, modulo: 'encomendas' },
   // Personalização (nunca desativada)
   { caminho: 'condominio', pagina: <CondominioPage />, perfis: SINDICO },
   { caminho: 'condominio/identidade', pagina: <IdentidadeVisualPage />, perfis: SINDICO },

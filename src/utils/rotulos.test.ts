@@ -7,6 +7,10 @@ import {
   ROTULOS_STATUS_ACESSO,
   ROTULOS_STATUS_AUTORIZACAO_VISITA,
   ROTULOS_STATUS_COBRANCA,
+  ROTULOS_STATUS_AUTORIZACAO_RETIRADA,
+  ROTULOS_STATUS_ENCOMENDA,
+  ROTULOS_STATUS_OCORRENCIA,
+  TOM_STATUS_ENCOMENDA,
   ROTULOS_MOMENTO_VISTORIA,
   ROTULOS_STATUS_RESERVA,
   TOM_STATUS_RESERVA,
@@ -71,6 +75,13 @@ describe('rotulos', () => {
     expect(chaves(ROTULOS_STATUS_RESERVA)).toEqual(['cancelada', 'concluida', 'confirmada', 'nao_compareceu']);
     expect(chaves(TOM_STATUS_RESERVA)).toEqual(['cancelada', 'concluida', 'confirmada', 'nao_compareceu']);
     expect(chaves(ROTULOS_MOMENTO_VISTORIA)).toEqual(['entrada', 'saida']);
+  });
+
+  it('statusDeEncomendasDevemTerRotuloParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_STATUS_ENCOMENDA)).toEqual(['aguardando_retirada', 'extraviada', 'retirada']);
+    expect(chaves(TOM_STATUS_ENCOMENDA)).toEqual(['aguardando_retirada', 'extraviada', 'retirada']);
+    expect(chaves(ROTULOS_STATUS_AUTORIZACAO_RETIRADA)).toEqual(['ativa', 'expirada', 'utilizada']);
+    expect(chaves(ROTULOS_STATUS_OCORRENCIA)).toEqual(['aberta', 'em_andamento', 'encerrada']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {

@@ -4,6 +4,7 @@
 import { http, HttpResponse } from 'msw';
 import type { Aviso } from '../tipos/avisos';
 import type { Problem } from '../tipos/comum';
+import type { Encomenda } from '../tipos/encomendas';
 import type { Cobranca, DocumentoFinanceiro, InadimplenciaResumo, Taxa } from '../tipos/financeiro';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
 import type { SolicitacaoVinculo, Unidade, VinculoUnidade } from '../tipos/minhaUnidade';
@@ -181,6 +182,13 @@ export const RESERVAS: Reserva[] = [
   { id: 2, areaComumId: 1, areaComumNome: 'Salão de festas', unidadeId: 2, inicio: '2026-10-10T13:00:00Z', fim: '2026-10-10T14:00:00Z', status: 'concluida', valor: 150 },
 ];
 
+// ---------------------------------------------------------------- Encomendas
+
+export const ENCOMENDAS: Encomenda[] = [
+  { id: 1, unidadeId: 1, transportadora: 'Correios', remetente: 'Loja X', codigoRetirada: '482913', recebidaEm: '2026-10-14T21:59:55Z', status: 'aguardando_retirada' },
+  { id: 2, unidadeId: 1, transportadora: 'Jadlog', codigoRetirada: '111222', recebidaEm: '2026-10-10T12:00:00Z', retiradaEm: '2026-10-10T18:00:00Z', status: 'retirada' },
+];
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -307,6 +315,28 @@ export const handlers = [
     const { momento } = (await request.json()) as { momento: string };
     return HttpResponse.json({ ...RESERVAS[0], status: momento === 'saida' ? 'concluida' : 'confirmada' });
   }),
+  http.get(api('/encomendas'), () => HttpResponse.json(pagina(ENCOMENDAS))),
+  http.post(api('/encomendas'), async ({ request }) => {
+    const dados = (await request.json()) as { unidadeId: number; transportadora: string };
+    if (dados.unidadeId > 2) return problema(404, 'Unidade não encontrada');
+    return HttpResponse.json({ id: 8, ...dados, codigoRetirada: '654321', recebidaEm: '2026-10-14T22:00:00Z', status: 'aguardando_retirada' }, { status: 201 });
+  }),
+  http.get(api('/encomendas/:encomendaId'), ({ params }) => {
+    const encomenda = ENCOMENDAS.find((item) => item.id === Number(params.encomendaId));
+    return encomenda ? HttpResponse.json(encomenda) : problema(404, 'Encomenda não encontrada');
+  }),
+  http.post(api('/encomendas/:encomendaId/autorizacoes-retirada'), async ({ request, params }) => {
+    const dados = (await request.json()) as { nomeTerceiro: string; documento: string };
+    return HttpResponse.json({ id: 3, encomendaId: Number(params.encomendaId), ...dados, codigo: '777888', validade: '2026-10-15T22:00:00Z', status: 'ativa' }, { status: 201 });
+  }),
+  http.post(api('/encomendas/:encomendaId/retirada'), async ({ request }) => {
+    const { codigo } = (await request.json()) as { codigo: string };
+    if (codigo !== '482913') return problema(409, 'Código de retirada inválido ou expirado');
+    return HttpResponse.json({ ...ENCOMENDAS[0], status: 'retirada', retiradaEm: '2026-10-14T23:00:00Z' });
+  }),
+  http.post(api('/encomendas/:encomendaId/ocorrencias'), async ({ request }) =>
+    HttpResponse.json({ id: 1, ...((await request.json()) as object), status: 'aberta', abertaEm: '2026-10-14T23:00:00Z' }, { status: 201 }),
+  ),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {
     const alteracoes = (await request.json()) as Partial<Personalizacao>;
