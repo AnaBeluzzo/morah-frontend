@@ -134,7 +134,8 @@ export async function entrar(pagina: Page, perfil: PerfilDemo): Promise<void> {
   await pagina.getByLabel('E-mail').fill(USUARIOS[perfil].email);
   await pagina.getByRole('textbox', { name: 'Senha', exact: true }).fill(SENHA_DEMO);
   await pagina.getByRole('button', { name: 'Entrar' }).click();
-  await expect(barraDeAbas(pagina)).toBeVisible();
+  // o primeiro login depois de o backend subir é lento (JVM aquecendo + BCrypt): mais folga aqui
+  await expect(barraDeAbas(pagina)).toBeVisible({ timeout: 30_000 });
 }
 
 export function barraDeAbas(pagina: Page) {
