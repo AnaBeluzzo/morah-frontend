@@ -1,24 +1,17 @@
-import { Cartao, ListaCartoes } from '../../componentes/Cartao';
+import { ListaAtalhos, type Atalho } from '../../componentes/ListaAtalhos';
 import { Tela } from '../../componentes/Tela';
 
-/** Aba "Condomínio" do síndico: identidade visual e módulos ativos. */
+const ATALHOS: Atalho[] = [
+  { rotulo: 'Identidade visual', caminho: '/condominio/identidade', icone: 'paleta' },
+  { rotulo: 'Módulos', caminho: '/condominio/modulos', icone: 'chave' },
+];
+
+/** Aba "Condomínio" do síndico: identidade visual (nome, logo, cores) e módulos ativos. */
 export function CondominioPage() {
   return (
     <Tela titulo="Condomínio">
-      <ListaCartoes rotulo="Configurações do condomínio">
-        <li>
-          <Cartao para="/condominio/identidade" rotulo="Identidade visual">
-            <h2>Identidade visual</h2>
-            <p>Nome de exibição, logo e cores do app.</p>
-          </Cartao>
-        </li>
-        <li>
-          <Cartao para="/condominio/modulos" rotulo="Módulos">
-            <h2>Módulos</h2>
-            <p>Ligue ou desligue os módulos do condomínio.</p>
-          </Cartao>
-        </li>
-      </ListaCartoes>
+      <p>Ajuste como o app aparece para todos os moradores e quais módulos ficam disponíveis.</p>
+      <ListaAtalhos itens={ATALHOS} rotulo="Configurações do condomínio" />
     </Tela>
   );
 }

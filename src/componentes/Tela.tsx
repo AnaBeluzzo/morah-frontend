@@ -13,7 +13,7 @@ interface TelaProps {
   children: ReactNode;
 }
 
-/** Estrutura de toda tela: barra superior (voltar ou logo, nome do condomínio, título, sino) e o conteúdo. */
+/** Estrutura de toda tela: a placa do topo (voltar ou logo, condomínio, sino e título) e o conteúdo. */
 export function Tela({ titulo, voltarPara, children }: TelaProps) {
   const navigate = useNavigate();
   const { sessao } = useSessao();
@@ -21,7 +21,7 @@ export function Tela({ titulo, voltarPara, children }: TelaProps) {
   const logoUrl = personalizacao?.logoUrl;
 
   useEffect(() => {
-    document.title = `${titulo} · Morah`;
+    document.title = `${titulo} | Morah`;
   }, [titulo]);
 
   function voltar() {
@@ -36,19 +36,20 @@ export function Tela({ titulo, voltarPara, children }: TelaProps) {
 
   return (
     <>
-      <header className={estilos.topo}>
-        {voltarPara ? (
-          <button type="button" className={estilos.botaoIcone} onClick={voltar} aria-label="Voltar">
-            <Icone nome="voltar" />
-          </button>
-        ) : (
-          logoUrl && <img className={estilos.logo} src={logoUrl} alt={`Logo de ${personalizacao.nomeExibicao}`} />
-        )}
-        <div className={estilos.titulos}>
-          {personalizacao && <span className={estilos.condominio}>{personalizacao.nomeExibicao}</span>}
-          <h1 className={estilos.titulo}>{titulo}</h1>
+      {/* a "placa do prédio": nome do condomínio em cima e o título da tela em letra larga */}
+      <header className={estilos.placa}>
+        <div className={estilos.linhaSuperior}>
+          {voltarPara ? (
+            <button type="button" className={estilos.botaoIcone} onClick={voltar} aria-label="Voltar">
+              <Icone nome="voltar" />
+            </button>
+          ) : (
+            logoUrl && <img className={estilos.logo} src={logoUrl} alt={`Logo de ${personalizacao.nomeExibicao}`} />
+          )}
+          <span className={estilos.condominio}>{personalizacao?.nomeExibicao ?? 'Morah'}</span>
+          {sessao && <SinoNotificacoes />}
         </div>
-        {sessao && <SinoNotificacoes />}
+        <h1 className={estilos.titulo}>{titulo}</h1>
       </header>
       <main className={estilos.conteudo}>{children}</main>
     </>

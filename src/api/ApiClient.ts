@@ -6,11 +6,12 @@ const PREFIXO_API = '/v1';
 const CHAVE_ACCESS_TOKEN = 'morah.accessToken';
 const CHAVE_REFRESH_TOKEN = 'morah.refreshToken';
 
-export type ValorParametro = string | number | boolean | undefined | null;
+/** Parâmetros de busca (?page=0&status=...); os vazios não vão para a URL. */
+export type Parametros = Record<string, string | number | undefined>;
 
 export interface OpcoesRequisicao {
   corpo?: unknown;
-  parametros?: Record<string, ValorParametro>;
+  parametros?: Parametros;
   /** Rota sem token (login e refresh): não envia Bearer nem tenta renovar em 401. */
   publica?: boolean;
 }
@@ -98,7 +99,7 @@ export class ApiClient {
 
   // ---------------------------------------------------------------- atalhos por método
 
-  get<T>(caminho: string, parametros?: Record<string, ValorParametro>): Promise<T> {
+  get<T>(caminho: string, parametros?: Parametros): Promise<T> {
     return this.requisitar<T>('GET', caminho, { parametros });
   }
 
@@ -117,22 +118,17 @@ export class ApiClient {
   // ---------------------------------------------------------------- requisição
 
   async requisitar<T>(metodo: string, caminho: string, opcoes: OpcoesRequisicao = {}): Promise<T> {
-    const tokenUsado = opcoes.publica ? null : localStorage.getItem(CHAVE_ACCESS_TOKEN);
-    let resposta = await this.enviar(metodo, caminho, opcoes, tokenUsado);
+    let resposta = await this.enviar(metodo, caminho, opcoes);
 
+    // 401 numa rota autenticada: renova os tokens UMA vez e repete a requisição UMA vez
     if (resposta.status === 401 && !opcoes.publica) {
-      // Se outra requisição já trocou o token enquanto esta estava no ar, basta repetir com o novo.
-      const tokenAtual = localStorage.getItem(CHAVE_ACCESS_TOKEN);
-      const renovou = tokenAtual !== null && tokenAtual !== tokenUsado ? true : await this.renovarTokens();
+      const renovou = await this.renovarTokens();
       if (!renovou) {
+        // refresh recusado: a sessão acabou, o app volta para o login
         this.encerrarSessao();
         throw await this.criarErro(resposta);
       }
-      // repete a requisição original UMA vez, já com o token novo
-      resposta = await this.enviar(metodo, caminho, opcoes, localStorage.getItem(CHAVE_ACCESS_TOKEN));
-      if (resposta.status === 401) {
-        this.encerrarSessao();
-      }
+      resposta = await this.enviar(metodo, caminho, opcoes);
     }
 
     if (!resposta.ok) {
@@ -142,7 +138,8 @@ export class ApiClient {
     return (texto ? JSON.parse(texto) : undefined) as T;
   }
 
-  private async enviar(metodo: string, caminho: string, opcoes: OpcoesRequisicao, token: string | null): Promise<Response> {
+  private async enviar(metodo: string, caminho: string, opcoes: OpcoesRequisicao): Promise<Response> {
+    const token = opcoes.publica ? null : localStorage.getItem(CHAVE_ACCESS_TOKEN);
     const cabecalhos: Record<string, string> = { Accept: 'application/json, application/problem+json' };
     if (opcoes.corpo !== undefined) {
       cabecalhos['Content-Type'] = 'application/json';
@@ -166,11 +163,11 @@ export class ApiClient {
     }
   }
 
-  private montarUrl(caminho: string, parametros: Record<string, ValorParametro> = {}): string {
+  private montarUrl(caminho: string, parametros: Parametros = {}): string {
     const url = new URL(PREFIXO_API + caminho, window.location.origin);
     for (const [nome, valor] of Object.entries(parametros)) {
       // filtros vazios não vão para a URL
-      if (valor !== undefined && valor !== null && valor !== '') {
+      if (valor !== undefined && valor !== '') {
         url.searchParams.set(nome, String(valor));
       }
     }
@@ -192,7 +189,7 @@ export class ApiClient {
     if (!refreshToken) {
       return false;
     }
-    const resposta = await this.enviar('POST', '/auth/refresh', { corpo: { refreshToken } }, null);
+    const resposta = await this.enviar('POST', '/auth/refresh', { corpo: { refreshToken }, publica: true });
     if (!resposta.ok) {
       this.logger.info('ApiClient', 'refresh recusado: sessão encerrada');
       return false;

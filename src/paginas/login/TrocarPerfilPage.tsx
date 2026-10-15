@@ -13,7 +13,7 @@ import { ROTULOS_PERFIL } from '../../utils/rotulos';
 import estilos from './TrocarPerfilPage.module.css';
 
 function descrever(opcao: PerfilDisponivel): string {
-  const unidade = opcao.unidadeId !== undefined ? ` · unidade ${opcao.unidadeId}` : '';
+  const unidade = opcao.unidadeId !== undefined ? `, unidade ${opcao.unidadeId}` : '';
   return `${ROTULOS_PERFIL[opcao.perfil]} em ${opcao.condominioNome ?? `condomínio ${opcao.condominioId}`}${unidade}`;
 }
 

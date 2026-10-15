@@ -2,28 +2,51 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: calc(32px + env(safe-area-inset-top)) var(--espaco) calc(var(--espaco) + env(safe-area-inset-bottom));
+  gap: 20px;
+  padding-bottom: calc(var(--espaco) + env(safe-area-inset-bottom));
 }
 
-.marca {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+/* a mesma placa das telas internas, maior: o nome do app em letra bem larga */
+.placa {
+  padding: calc(40px + env(safe-area-inset-top)) var(--espaco) 32px;
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
 }
 
-.marca h1 {
-  margin: 8px 0 0;
-  font-size: 2rem;
+.placa img {
+  display: block;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.6);
+}
+
+.placa h1 {
+  margin: 0 0 8px;
+  font-size: 3.25rem;
+  font-weight: 850;
+  font-stretch: 125%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.placa p {
+  margin: 0;
+  max-width: 30ch;
+  opacity: 0.9;
 }
 
 .cartao {
-  padding: var(--espaco);
+  margin: 0 var(--espaco);
+  padding: 20px var(--espaco);
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
+  color: var(--cor-tinta);
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio-grupo);
+}
+
+.cartao h2 {
+  font-size: 1.375rem;
+  font-weight: 800;
 }
 
 .senha {
@@ -34,7 +57,7 @@
 
 .mostrar {
   align-self: flex-end;
-  padding: 0 8px;
+  padding: 0 4px;
   border: none;
   background: transparent;
   color: var(--cor-primaria);
@@ -43,17 +66,16 @@
 }
 
 .demonstracao {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: var(--espaco);
+  margin: 0 var(--espaco);
+  padding: 0 var(--espaco);
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border-radius: var(--raio);
+  color: var(--cor-tinta);
+  border: 1px dashed var(--cor-linha);
+  border-radius: var(--raio-grupo);
 }
 
 .demonstracao summary {
-  min-height: 44px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -61,7 +83,7 @@
 }
 
 .demonstracao[open] {
-  gap: 8px;
+  padding-bottom: var(--espaco);
 }
 
 .demonstracao button {

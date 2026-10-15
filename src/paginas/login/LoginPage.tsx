@@ -57,11 +57,11 @@ export function LoginPage() {
 
   return (
     <main className={estilos.pagina}>
-      <div className={estilos.marca}>
-        <img src="/favicon.svg" alt="" width={56} height={56} />
+      <header className={estilos.placa}>
+        <img src="/favicon.svg" alt="" width={44} height={44} />
         <h1>Morah</h1>
-        <p>Gestão do seu condomínio</p>
-      </div>
+        <p>Avisos, cobranças, visitas e encomendas do seu condomínio.</p>
+      </header>
 
       <form className={estilos.cartao} onSubmit={enviar} noValidate>
         <h2>Entrar</h2>

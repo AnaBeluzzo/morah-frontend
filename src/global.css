@@ -1,40 +1,51 @@
-/* Tema: todas as cores do app vêm destas variáveis. As três cores do condomínio (e o texto
-   legível sobre cada uma) são trocadas em tempo de execução por utils/cores.ts. */
+/* Identidade do Morah: a barra do topo é a "placa do prédio" (cor primária + título largo);
+   o resto é quieto — listas agrupadas com linhas finas, uma única família tipográfica.
+   As três cores do condomínio (e o texto legível sobre cada uma) são trocadas em tempo de
+   execução por utils/cores.ts; todo o CSS usa estas variáveis. */
+@import '@fontsource-variable/archivo/wdth.css';
+
 :root {
+  /* cores do condomínio (padrão = seed do backend) */
   --cor-primaria: #1f4e79;
   --cor-primaria-texto: #ffffff;
   --cor-secundaria: #f2f4f7;
-  --cor-secundaria-texto: #111827;
+  --cor-secundaria-texto: #1c2733;
   --cor-destaque: #f59e0b;
-  --cor-destaque-texto: #111827;
+  --cor-destaque-texto: #1c2733;
 
-  --cor-fundo-externo: #d9dde3;
+  /* neutros do app */
+  --cor-tinta: #1c2733;
+  --cor-tinta-suave: #556170;
+  --cor-linha: #d6dce4;
   --cor-superficie: #ffffff;
-  --cor-texto: #111827;
-  --cor-texto-suave: #4b5563;
-  --cor-borda: #d1d5db;
+  --cor-fundo-externo: #c9d0d9;
 
-  --cor-sucesso: #065f46;
-  --cor-sucesso-fundo: #d1fae5;
-  --cor-alerta: #92400e;
-  --cor-alerta-fundo: #fef3c7;
-  --cor-perigo: #b91c1c;
-  --cor-perigo-fundo: #fee2e2;
-  --cor-info: #1e40af;
-  --cor-info-fundo: #dbeafe;
-  --cor-neutro: #374151;
-  --cor-neutro-fundo: #e5e7eb;
+  /* status: sempre usados com texto (nunca só a cor) */
+  --cor-sucesso: #1e7a4c;
+  --cor-alerta: #9a5b00;
+  --cor-perigo: #b3261e;
+  --cor-info: #24578f;
+  --cor-neutro: #556170;
+  --cor-perigo-fundo: #fbe9e7;
 
-  --raio: 12px;
+  /* tipografia: Archivo larga e pesada nos títulos (letreiro de prédio), normal no corpo */
+  --fonte: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --largura-titulo: 115%;
+
+  /* cantos com hierarquia: grupo > campo > selo */
+  --raio-grupo: 14px;
+  --raio-campo: 10px;
+  --raio-selo: 6px;
+
   --espaco: 16px;
   --largura-maxima: 480px;
   --altura-abas: 64px;
-  --sombra: 0 1px 3px rgb(0 0 0 / 0.12);
 
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--fonte);
   font-size: 16px;
   line-height: 1.5;
-  color: var(--cor-texto);
+  color: var(--cor-tinta);
+  font-variant-numeric: tabular-nums;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -66,20 +77,23 @@ body {
 h1,
 h2,
 h3 {
-  line-height: 1.25;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
+  font-stretch: var(--largura-titulo);
+  line-height: 1.2;
 }
 
 h2 {
   font-size: 1.125rem;
+  font-weight: 700;
 }
 
 h3 {
   font-size: 1rem;
+  font-weight: 700;
 }
 
 p {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 a {
@@ -94,7 +108,8 @@ h1,
 h2,
 h3,
 span,
-code {
+code,
+strong {
   overflow-wrap: anywhere;
 }
 
@@ -103,18 +118,18 @@ input,
 select,
 textarea {
   width: 100%;
-  min-height: 44px;
+  min-height: 48px;
   padding: 10px 12px;
   font: inherit;
   font-size: 16px;
-  color: var(--cor-texto);
+  color: var(--cor-tinta);
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  border-radius: 8px;
+  border: 1.5px solid var(--cor-linha);
+  border-radius: var(--raio-campo);
 }
 
 textarea {
-  min-height: 96px;
+  min-height: 112px;
   resize: vertical;
 }
 
@@ -131,11 +146,19 @@ input[type='color'] {
   padding: 4px;
 }
 
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--cor-primaria);
+  outline: none;
+}
+
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+summary:focus-visible {
   outline: 3px solid var(--cor-destaque);
   outline-offset: 2px;
 }
@@ -159,18 +182,18 @@ button:disabled {
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 dl {
   margin: 0;
 }
 
-.somente-leitor-de-tela {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

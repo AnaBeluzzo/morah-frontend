@@ -32,8 +32,8 @@ export function DocumentosPage() {
                     </div>
                     <h2>{documento.titulo}</h2>
                     <p className={estilos.suave}>
-                      {documento.competencia ? `Competência ${formatarData(documento.competencia)} · ` : ''}
-                      publicado em {formatarData(documento.publicadoEm)}
+                      Publicado em {formatarData(documento.publicadoEm)}
+                      {documento.competencia ? `, competência ${formatarData(documento.competencia)}` : ''}
                     </p>
                     <a href={documento.arquivoUrl} target="_blank" rel="noopener noreferrer">
                       Abrir arquivo

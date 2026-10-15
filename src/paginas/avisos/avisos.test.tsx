@@ -5,7 +5,8 @@ import { api, AVISOS, ID_AVISO_EXPIRADO, pagina, problema } from '../../testes/h
 import { renderizar } from '../../testes/renderizar';
 import { servidor } from '../../testes/servidor';
 import { AvisoPage } from './AvisoPage';
-import { FormularioAvisoPage } from './FormularioAvisoPage';
+import { EditarAvisoPage } from './EditarAvisoPage';
+import { NovoAvisoPage } from './NovoAvisoPage';
 import { MuralPage } from './MuralPage';
 
 describe('MuralPage', () => {
@@ -76,9 +77,9 @@ describe('AvisoPage', () => {
   });
 });
 
-describe('FormularioAvisoPage', () => {
+describe('NovoAvisoPage e EditarAvisoPage', () => {
   it('deveValidarNoClienteEPedirOIdDaUnidade', async () => {
-    const { usuario } = renderizar(<FormularioAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
+    const { usuario } = renderizar(<NovoAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
     await usuario.selectOptions(screen.getByLabelText('Público'), 'unidade');
     await usuario.click(screen.getByRole('button', { name: 'Publicar' }));
     expect(screen.getByText('Informe o título.')).toBeInTheDocument();
@@ -88,7 +89,7 @@ describe('FormularioAvisoPage', () => {
 
   it('deveMostrarOsErrosDoServidorEmCadaCampo', async () => {
     servidor.use(http.post(api('/avisos'), () => problema(400, 'Um ou mais campos são inválidos', [{ campo: 'titulo', mensagem: 'tamanho deve ser entre 1 e 120' }])));
-    const { usuario } = renderizar(<FormularioAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
+    const { usuario } = renderizar(<NovoAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
     await usuario.type(screen.getByLabelText(/Título/), 'x');
     await usuario.type(screen.getByLabelText(/Conteúdo/), 'y');
     await usuario.click(screen.getByRole('button', { name: 'Publicar' }));
@@ -103,7 +104,7 @@ describe('FormularioAvisoPage', () => {
         return HttpResponse.json({ ...AVISOS[0], id: 10 }, { status: 201 });
       }),
     );
-    const { usuario } = renderizar(<FormularioAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
+    const { usuario } = renderizar(<NovoAvisoPage />, { rota: '/avisos/novo', caminho: '/avisos/novo', perfil: 'sindico' });
     await usuario.type(screen.getByLabelText(/Título/), 'Portão');
     await usuario.type(screen.getByLabelText(/Conteúdo/), 'Portão em manutenção');
     await usuario.selectOptions(screen.getByLabelText('Público'), 'unidade');
@@ -123,7 +124,7 @@ describe('FormularioAvisoPage', () => {
         return HttpResponse.json({ ...AVISOS[0], titulo: 'Falta de água amanhã' });
       }),
     );
-    const { usuario } = renderizar(<FormularioAvisoPage />, { rota: '/avisos/2/editar', caminho: '/avisos/:avisoId/editar', perfil: 'sindico' });
+    const { usuario } = renderizar(<EditarAvisoPage />, { rota: '/avisos/2/editar', caminho: '/avisos/:avisoId/editar', perfil: 'sindico' });
     const titulo = await screen.findByLabelText(/Título/);
     await usuario.type(titulo, ' amanhã');
     await usuario.click(screen.getByRole('button', { name: 'Salvar alterações' }));

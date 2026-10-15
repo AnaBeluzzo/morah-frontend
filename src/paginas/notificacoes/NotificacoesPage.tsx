@@ -53,7 +53,7 @@ export function NotificacoesPage() {
                         <strong>{notificacao.titulo}</strong>
                         {notificacao.mensagem && <span>{notificacao.mensagem}</span>}
                         <small>
-                          {notificacao.tipo ? `${rotular(ROTULOS_TIPO_NOTIFICACAO, notificacao.tipo)} · ` : ''}
+                          {notificacao.tipo ? `${rotular(ROTULOS_TIPO_NOTIFICACAO, notificacao.tipo)}, ` : ''}
                           {formatarDataHora(notificacao.enviadaEm)}
                         </small>
                       </span>

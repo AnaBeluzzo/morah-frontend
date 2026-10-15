@@ -68,8 +68,8 @@ export function MuralPage() {
                       </div>
                       <h2 className={aviso.lidoPeloUsuario ? '' : estilos.naoLido}>{aviso.titulo}</h2>
                       <p className={estilos.suave}>
-                        {aviso.categoria ? `${aviso.categoria} · ` : ''}
-                        {formatarData(aviso.publicadoEm)}
+                        Publicado em {formatarData(aviso.publicadoEm)}
+                        {aviso.categoria ? `, categoria ${aviso.categoria}` : ''}
                       </p>
                     </Cartao>
                   </li>

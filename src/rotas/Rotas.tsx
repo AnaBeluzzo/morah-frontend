@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Route, Routes } from 'react-router';
 import { EstadoVazio } from '../componentes/Estados';
 import { LayoutApp } from '../componentes/LayoutApp';
@@ -5,8 +6,9 @@ import { Tela } from '../componentes/Tela';
 import { useContextoAtivo } from '../contexto/SessaoContext';
 import { useTema } from '../contexto/TemaContext';
 import { AvisoPage } from '../paginas/avisos/AvisoPage';
-import { FormularioAvisoPage } from '../paginas/avisos/FormularioAvisoPage';
+import { EditarAvisoPage } from '../paginas/avisos/EditarAvisoPage';
 import { MuralPage } from '../paginas/avisos/MuralPage';
+import { NovoAvisoPage } from '../paginas/avisos/NovoAvisoPage';
 import { CobrancasPage } from '../paginas/financeiro/CobrancasPage';
 import { DetalheCobrancaPage } from '../paginas/financeiro/DetalheCobrancaPage';
 import { DocumentosPage } from '../paginas/financeiro/DocumentosPage';
@@ -24,13 +26,44 @@ import { CondominioPage } from '../paginas/personalizacao/CondominioPage';
 import { IdentidadeVisualPage } from '../paginas/personalizacao/IdentidadeVisualPage';
 import { ModulosPage } from '../paginas/personalizacao/ModulosPage';
 import type { Perfil } from '../tipos/login';
+import type { ModuloCodigo } from '../tipos/personalizacao';
 import { ABAS_POR_PERFIL, itensVisiveis } from './navegacao';
+import { RotaProtegida, RotaPublica } from './RotaProtegida';
 
-// perfis de cada área, iguais aos `security` do contrato (proprietário entra onde o morador entra)
+// perfis de cada tela, iguais aos `security` do contrato (proprietário entra onde o morador entra)
 const MORADOR_E_SINDICO: Perfil[] = ['morador', 'sindico'];
 const SINDICO: Perfil[] = ['sindico'];
 const MORADOR: Perfil[] = ['morador'];
-import { RotaProtegida, RotaPublica } from './RotaProtegida';
+
+interface TelaProtegida {
+  caminho: string;
+  pagina: ReactNode;
+  /** Sem a lista: qualquer perfil logado. */
+  perfis?: Perfil[];
+  /** Módulo ativável: desligado pelo síndico, a tela mostra "Módulo indisponível". */
+  modulo?: ModuloCodigo;
+}
+
+/** Tabela das telas: caminho, componente, quem pode abrir e de qual módulo é. */
+const TELAS_PROTEGIDAS: TelaProtegida[] = [
+  // Avisos
+  { caminho: 'avisos', pagina: <MuralPage />, modulo: 'avisos' },
+  { caminho: 'avisos/novo', pagina: <NovoAvisoPage />, perfis: SINDICO, modulo: 'avisos' },
+  { caminho: 'avisos/:avisoId', pagina: <AvisoPage />, modulo: 'avisos' },
+  { caminho: 'avisos/:avisoId/editar', pagina: <EditarAvisoPage />, perfis: SINDICO, modulo: 'avisos' },
+  // Financeiro
+  { caminho: 'financeiro', pagina: <CobrancasPage />, perfis: MORADOR_E_SINDICO, modulo: 'financeiro' },
+  { caminho: 'financeiro/cobrancas/:cobrancaId', pagina: <DetalheCobrancaPage />, perfis: MORADOR_E_SINDICO, modulo: 'financeiro' },
+  { caminho: 'financeiro/cobrancas/:cobrancaId/pix', pagina: <PixPage />, perfis: MORADOR, modulo: 'financeiro' },
+  { caminho: 'financeiro/documentos', pagina: <DocumentosPage />, perfis: MORADOR_E_SINDICO, modulo: 'financeiro' },
+  { caminho: 'financeiro/documentos/novo', pagina: <NovoDocumentoPage />, perfis: SINDICO, modulo: 'financeiro' },
+  { caminho: 'financeiro/taxas', pagina: <TaxasPage />, perfis: SINDICO, modulo: 'financeiro' },
+  { caminho: 'financeiro/inadimplencia', pagina: <InadimplenciaPage />, perfis: SINDICO, modulo: 'financeiro' },
+  // Personalização (nunca desativada)
+  { caminho: 'condominio', pagina: <CondominioPage />, perfis: SINDICO },
+  { caminho: 'condominio/identidade', pagina: <IdentidadeVisualPage />, perfis: SINDICO },
+  { caminho: 'condominio/modulos', pagina: <ModulosPage />, perfis: SINDICO },
+];
 
 /** Layout das telas logadas, com as abas do perfil ativo (só as de módulos ativos). */
 function LayoutLogado() {
@@ -70,20 +103,17 @@ export function Rotas() {
         <Route path="perfil" element={<PerfilPage />} />
         <Route path="perfil/trocar" element={<TrocarPerfilPage />} />
         <Route path="notificacoes" element={<NotificacoesPage />} />
-        <Route path="avisos" element={<RotaProtegida modulo="avisos"><MuralPage /></RotaProtegida>} />
-        <Route path="avisos/novo" element={<RotaProtegida perfis={['sindico']} modulo="avisos"><FormularioAvisoPage /></RotaProtegida>} />
-        <Route path="avisos/:avisoId" element={<RotaProtegida modulo="avisos"><AvisoPage /></RotaProtegida>} />
-        <Route path="avisos/:avisoId/editar" element={<RotaProtegida perfis={['sindico']} modulo="avisos"><FormularioAvisoPage /></RotaProtegida>} />
-        <Route path="financeiro" element={<RotaProtegida perfis={MORADOR_E_SINDICO} modulo="financeiro"><CobrancasPage /></RotaProtegida>} />
-        <Route path="financeiro/cobrancas/:cobrancaId" element={<RotaProtegida perfis={MORADOR_E_SINDICO} modulo="financeiro"><DetalheCobrancaPage /></RotaProtegida>} />
-        <Route path="financeiro/cobrancas/:cobrancaId/pix" element={<RotaProtegida perfis={MORADOR} modulo="financeiro"><PixPage /></RotaProtegida>} />
-        <Route path="financeiro/documentos" element={<RotaProtegida perfis={MORADOR_E_SINDICO} modulo="financeiro"><DocumentosPage /></RotaProtegida>} />
-        <Route path="financeiro/documentos/novo" element={<RotaProtegida perfis={SINDICO} modulo="financeiro"><NovoDocumentoPage /></RotaProtegida>} />
-        <Route path="financeiro/taxas" element={<RotaProtegida perfis={SINDICO} modulo="financeiro"><TaxasPage /></RotaProtegida>} />
-        <Route path="financeiro/inadimplencia" element={<RotaProtegida perfis={SINDICO} modulo="financeiro"><InadimplenciaPage /></RotaProtegida>} />
-        <Route path="condominio" element={<RotaProtegida perfis={['sindico']}><CondominioPage /></RotaProtegida>} />
-        <Route path="condominio/identidade" element={<RotaProtegida perfis={['sindico']}><IdentidadeVisualPage /></RotaProtegida>} />
-        <Route path="condominio/modulos" element={<RotaProtegida perfis={['sindico']}><ModulosPage /></RotaProtegida>} />
+        {TELAS_PROTEGIDAS.map((tela) => (
+          <Route
+            key={tela.caminho}
+            path={tela.caminho}
+            element={
+              <RotaProtegida perfis={tela.perfis} modulo={tela.modulo}>
+                {tela.pagina}
+              </RotaProtegida>
+            }
+          />
+        ))}
         <Route path="*" element={<PaginaNaoEncontrada />} />
       </Route>
     </Routes>

@@ -6,8 +6,8 @@ import { Cartao, Dado, ListaCartoes } from '../../componentes/Cartao';
 import { ErroFormulario } from '../../componentes/Estados';
 import { Secao, Tela } from '../../componentes/Tela';
 import { useToast } from '../../componentes/Toast';
-import { useCriarTaxa, useGerarCobrancas, useTaxasCriadas, type TaxaCriada } from '../../hooks/financeiroHooks';
-import type { TipoRateio } from '../../tipos/financeiro';
+import { useCriarTaxa, useGerarCobrancas } from '../../hooks/financeiroHooks';
+import type { Taxa, TipoRateio } from '../../tipos/financeiro';
 import { formatarCompetencia, formatarMoeda } from '../../utils/formatadores';
 import { ROTULOS_TIPO_RATEIO } from '../../utils/rotulos';
 import estilos from '../paginas.module.css';
@@ -17,7 +17,7 @@ const OPCOES_RATEIO = Object.entries(ROTULOS_TIPO_RATEIO).map(([valor, rotulo]) 
 
 type Erros = Partial<Record<'descricao' | 'competencia' | 'valor' | 'tipoRateio' | 'vencimentoDia', string>>;
 
-function FormularioTaxa() {
+function FormularioTaxa({ aoCriar }: { aoCriar: (taxa: Taxa) => void }) {
   const criar = useCriarTaxa();
   const { mostrarToast } = useToast();
   const [descricao, setDescricao] = useState('');
@@ -47,7 +47,8 @@ function FormularioTaxa() {
     criar.mutate(
       { descricao: descricao.trim(), competencia, valor: Number(valor), tipoRateio, vencimentoDia: dia },
       {
-        onSuccess: () => {
+        onSuccess: (taxa) => {
+          aoCriar(taxa);
           mostrarToast('Taxa criada');
           setDescricao('');
           setValor('');
@@ -83,10 +84,11 @@ function FormularioTaxa() {
   );
 }
 
-function CartaoTaxa({ item }: { item: TaxaCriada }) {
+function CartaoTaxa({ taxa }: { taxa: Taxa }) {
   const gerar = useGerarCobrancas();
   const { mostrarToast } = useToast();
-  const { taxa, resultado } = item;
+  // resultado da última geração desta taxa (totalGeradas e falhas por unidade)
+  const resultado = gerar.data;
   return (
     <Cartao rotulo={taxa.descricao}>
       <h3>{taxa.descricao}</h3>
@@ -125,23 +127,23 @@ function CartaoTaxa({ item }: { item: TaxaCriada }) {
 
 /**
  * Taxas e cobranças em lote (síndico). Não há listagem de taxas no contrato: as taxas criadas
- * aqui ficam guardadas só em memória para oferecer "Gerar cobranças" com o id devolvido.
+ * ficam só na memória desta tela (useState), para oferecer "Gerar cobranças" com o id devolvido.
  */
 export function TaxasPage() {
-  const { data: criadas } = useTaxasCriadas();
+  const [criadas, setCriadas] = useState<Taxa[]>([]);
   return (
     <Tela titulo="Taxas e cobranças" voltarPara="/financeiro">
       <Secao titulo="Nova taxa">
-        <FormularioTaxa />
+        <FormularioTaxa aoCriar={(taxa) => setCriadas((atuais) => [taxa, ...atuais])} />
       </Secao>
       <Secao titulo="Taxas criadas nesta sessão">
         {criadas.length === 0 ? (
           <p className={estilos.suave}>Crie uma taxa para gerar as cobranças de todas as unidades.</p>
         ) : (
           <ListaCartoes rotulo="Taxas criadas">
-            {criadas.map((item) => (
-              <li key={item.taxa.id}>
-                <CartaoTaxa item={item} />
+            {criadas.map((taxa) => (
+              <li key={taxa.id}>
+                <CartaoTaxa taxa={taxa} />
               </li>
             ))}
           </ListaCartoes>

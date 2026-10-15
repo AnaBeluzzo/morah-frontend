@@ -13,10 +13,11 @@ import estilos from './IdentidadeVisualPage.module.css';
 
 type CampoCor = 'corPrimaria' | 'corSecundaria' | 'corDestaque';
 
-const CORES: { campo: CampoCor; rotulo: string; ajuda: string }[] = [
-  { campo: 'corPrimaria', rotulo: 'Cor primária', ajuda: 'Barra superior e botões principais.' },
-  { campo: 'corSecundaria', rotulo: 'Cor secundária', ajuda: 'Fundo das telas.' },
-  { campo: 'corDestaque', rotulo: 'Cor de destaque', ajuda: 'Selos e itens em destaque.' },
+// cada cor do contrato e a variável CSS que ela controla no app
+const CORES: { campo: CampoCor; variavel: string; rotulo: string; ajuda: string }[] = [
+  { campo: 'corPrimaria', variavel: '--cor-primaria', rotulo: 'Cor primária', ajuda: 'Barra superior e botões principais.' },
+  { campo: 'corSecundaria', variavel: '--cor-secundaria', rotulo: 'Cor secundária', ajuda: 'Fundo das telas.' },
+  { campo: 'corDestaque', variavel: '--cor-destaque', rotulo: 'Cor de destaque', ajuda: 'Selos e itens em destaque.' },
 ];
 
 interface Valores {
@@ -60,11 +61,10 @@ function validar(valores: Valores): Erros {
 /** Variáveis CSS da prévia: mostra as cores escolhidas antes de salvar, sem mudar o app. */
 function estiloPrevia(valores: Valores): CSSProperties {
   const variaveis: Record<string, string> = {};
-  for (const { campo } of CORES) {
+  for (const { campo, variavel } of CORES) {
     if (corValida(valores[campo])) {
-      const nome = campo === 'corPrimaria' ? 'primaria' : campo === 'corSecundaria' ? 'secundaria' : 'destaque';
-      variaveis[`--cor-${nome}`] = valores[campo];
-      variaveis[`--cor-${nome}-texto`] = corDoTextoSobre(valores[campo]);
+      variaveis[variavel] = valores[campo];
+      variaveis[`${variavel}-texto`] = corDoTextoSobre(valores[campo]);
     }
   }
   return variaveis as CSSProperties;

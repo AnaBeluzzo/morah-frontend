@@ -77,13 +77,10 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
       cliente.definirTokens(resposta);
       // o cache é do contexto anterior (outro perfil/condomínio): começa do zero
       clienteQuery.removeQueries();
-      setSessao((atual) => {
-        const nova = { contexto: resposta.contexto, perfisDisponiveis: atual?.perfisDisponiveis ?? [] };
-        salvar(nova);
-        return nova;
-      });
+      // as opções de troca continuam as mesmas do login; só o contexto ativo muda
+      atualizar({ contexto: resposta.contexto, perfisDisponiveis: sessao?.perfisDisponiveis ?? [] });
     },
-    [clienteQuery],
+    [clienteQuery, atualizar, sessao],
   );
 
   // quando o refresh falha, o ApiClient avisa aqui e o app volta para o login

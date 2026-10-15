@@ -36,10 +36,9 @@ export function TemaProvider({ children }: { children: ReactNode }) {
     [lista],
   );
 
-  const api = useMemo(
-    () => ({ personalizacao, modulosCarregados: !modulos.isPending || modulos.fetchStatus === 'idle', moduloAtivo }),
-    [personalizacao, modulos.isPending, modulos.fetchStatus, moduloAtivo],
-  );
+  // isLoading = primeira busca em andamento (sem sessão a busca nem começa)
+  const modulosCarregados = !modulos.isLoading;
+  const api = useMemo(() => ({ personalizacao, modulosCarregados, moduloAtivo }), [personalizacao, modulosCarregados, moduloAtivo]);
   return <TemaContexto.Provider value={api}>{children}</TemaContexto.Provider>;
 }
 

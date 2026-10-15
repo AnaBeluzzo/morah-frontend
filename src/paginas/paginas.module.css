@@ -1,11 +1,11 @@
-/* Estilos compartilhados pelas telas (listas, filtros, detalhes e ações). */
+/* Estilos compartilhados pelas telas (filtros, valores, códigos e ações). */
 
 .filtros {
   padding: 0 var(--espaco);
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
+  color: var(--cor-tinta);
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio-grupo);
 }
 
 .filtros summary {
@@ -32,18 +32,19 @@
 }
 
 .suave {
-  color: var(--cor-texto-suave);
+  color: var(--cor-tinta-suave);
   font-size: 0.9375rem;
 }
 
 .acoes {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .conteudo {
   white-space: pre-wrap;
+  max-width: 65ch;
 }
 
 .linha {
@@ -53,28 +54,30 @@
   gap: 8px;
 }
 
+/* valores em reais: letra larga, como o número de um apartamento na porta */
 .valor {
+  margin: 2px 0 4px;
   font-size: 1.5rem;
   font-weight: 800;
+  font-stretch: 112%;
 }
 
 .codigo {
   display: block;
   padding: 12px;
-  border-radius: 8px;
-  background: var(--cor-neutro-fundo);
-  color: var(--cor-texto);
+  border-radius: var(--raio-campo);
+  background: var(--cor-secundaria);
+  color: var(--cor-secundaria-texto);
   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
   font-size: 0.875rem;
   overflow-wrap: anywhere;
 }
 
 .codigoGrande {
-  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
-  text-align: center;
+  font-stretch: 125%;
+  letter-spacing: 0.12em;
 }
 
 .opcaoCheck {
@@ -94,12 +97,14 @@
 .indicador {
   padding: var(--espaco);
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
+  color: var(--cor-tinta);
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio-grupo);
 }
 
 .indicador strong {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.625rem;
+  font-weight: 800;
+  font-stretch: 115%;
 }

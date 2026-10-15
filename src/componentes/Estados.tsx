@@ -8,7 +8,7 @@ import estilos from './Estados.module.css';
 
 export function EstadoCarregando({ mensagem = 'Carregando...' }: { mensagem?: string }) {
   return (
-    <div className={estilos.estado} role="status" aria-live="polite">
+    <div className={estilos.carregando} role="status" aria-live="polite">
       <span className={estilos.spinner} aria-hidden="true" />
       <p>{mensagem}</p>
     </div>

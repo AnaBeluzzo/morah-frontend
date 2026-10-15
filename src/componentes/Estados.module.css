@@ -1,16 +1,40 @@
 .estado {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 24px var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  border: 1px dashed var(--cor-linha);
+  border-radius: var(--raio-grupo);
+}
+
+.estado > svg {
+  color: var(--cor-tinta-suave);
+}
+
+.estado p {
+  margin: 0;
+  max-width: 36ch;
+}
+
+.carregando {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 32px 16px;
-  text-align: center;
+  gap: 12px;
+  padding: 24px var(--espaco);
+  color: var(--cor-secundaria-texto);
+}
+
+.carregando p {
+  margin: 0;
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
-  border: 4px solid var(--cor-borda);
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--cor-linha);
   border-top-color: var(--cor-primaria);
   border-radius: 50%;
   animation: girar 0.8s linear infinite;
@@ -18,8 +42,9 @@
 
 .erroFormulario {
   margin: 0;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--cor-perigo);
+  border-radius: 0 var(--raio-campo) var(--raio-campo) 0;
   background: var(--cor-perigo-fundo);
   color: var(--cor-perigo);
   font-weight: 600;

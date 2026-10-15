@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router';
-import { Botao, BotaoLink } from '../../componentes/Botao';
+import { Botao } from '../../componentes/Botao';
+import { ListaAtalhos, type Atalho } from '../../componentes/ListaAtalhos';
 import { BotaoCarregarMais } from '../../componentes/BotaoCarregarMais';
 import { Campo } from '../../componentes/Campo';
 import { Cartao, ListaCartoes } from '../../componentes/Cartao';
@@ -16,6 +17,12 @@ import { ROTULOS_STATUS_COBRANCA, TOM_STATUS_COBRANCA } from '../../utils/rotulo
 import estilos from '../paginas.module.css';
 
 const PADRAO_COMPETENCIA = /^\d{4}-\d{2}$/;
+
+const ATALHOS: Atalho[] = [{ rotulo: 'Documentos', caminho: '/financeiro/documentos', icone: 'documento' }];
+const ATALHOS_SINDICO: Atalho[] = [
+  { rotulo: 'Inadimplência', caminho: '/financeiro/inadimplencia', icone: 'grafico' },
+  { rotulo: 'Taxas e cobranças em lote', caminho: '/financeiro/taxas', icone: 'financeiro' },
+];
 const OPCOES_STATUS = [{ valor: '', rotulo: 'Todos' }, ...Object.entries(ROTULOS_STATUS_COBRANCA).map(([valor, rotulo]) => ({ valor, rotulo }))];
 
 /** Aba Financeiro: atalhos do módulo e a lista de cobranças (da unidade, ou do condomínio para o síndico). */
@@ -56,21 +63,7 @@ export function CobrancasPage() {
 
   return (
     <Tela titulo="Financeiro">
-      <nav aria-label="Atalhos do financeiro" className={estilos.grade}>
-        <BotaoLink para="/financeiro/documentos" variante="secundario">
-          Documentos
-        </BotaoLink>
-        {sindico && (
-          <>
-            <BotaoLink para="/financeiro/inadimplencia" variante="secundario">
-              Inadimplência
-            </BotaoLink>
-            <BotaoLink para="/financeiro/taxas" variante="secundario">
-              Taxas e cobranças em lote
-            </BotaoLink>
-          </>
-        )}
-      </nav>
+      <ListaAtalhos rotulo="Atalhos do financeiro" itens={sindico ? [...ATALHOS, ...ATALHOS_SINDICO] : ATALHOS} />
 
       <details className={estilos.filtros}>
         <summary>Filtros</summary>
@@ -107,8 +100,8 @@ export function CobrancasPage() {
                     </div>
                     <p className={estilos.valor}>{formatarMoeda(cobranca.valorTotal)}</p>
                     <p className={estilos.suave}>
-                      Competência {formatarCompetencia(cobranca.competencia)} · vence {formatarData(cobranca.vencimento)}
-                      {sindico ? ` · unidade ${cobranca.unidadeId}` : ''}
+                      Vence em {formatarData(cobranca.vencimento)}, competência {formatarCompetencia(cobranca.competencia)}
+                      {sindico ? `, unidade ${cobranca.unidadeId}` : ''}
                     </p>
                   </Cartao>
                 </li>

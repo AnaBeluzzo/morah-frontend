@@ -10,7 +10,7 @@ import {
   gerarCobrancasEmLote,
   gerarPix,
 } from '../api/financeiroApi';
-import type { BaixaManualRequest, DocumentoFinanceiroCreateRequest, FiltrosCobrancas, GerarCobrancasResponse, Taxa, TaxaCreateRequest } from '../tipos/financeiro';
+import type { BaixaManualRequest, DocumentoFinanceiroCreateRequest, FiltrosCobrancas, TaxaCreateRequest } from '../tipos/financeiro';
 import { Logger } from '../utils/logger';
 import { proximaPagina, TAMANHO_PAGINA } from './paginacao';
 
@@ -67,28 +67,10 @@ export function useCriarDocumentoFinanceiro() {
   });
 }
 
-/** Taxa criada nesta sessão e o resultado da última geração de cobranças dela. */
-export interface TaxaCriada {
-  taxa: Taxa;
-  resultado?: GerarCobrancasResponse;
-}
-
-// Não existe listagem de taxas no contrato: as criadas ficam só em memória (cache do Query),
-// para oferecer "Gerar cobranças" com o id devolvido. Somem no logout ou ao recarregar.
-const CHAVE_TAXAS_CRIADAS = ['taxasCriadas'];
-
-export function useTaxasCriadas() {
-  return useQuery<TaxaCriada[]>({ queryKey: CHAVE_TAXAS_CRIADAS, queryFn: () => [], initialData: [], staleTime: Infinity, gcTime: Infinity });
-}
-
 export function useCriarTaxa() {
-  const clienteQuery = useQueryClient();
   return useMutation({
     mutationFn: (dados: TaxaCreateRequest) => criarTaxa(dados),
-    onSuccess: (taxa) => {
-      clienteQuery.setQueryData<TaxaCriada[]>(CHAVE_TAXAS_CRIADAS, (atuais = []) => [{ taxa }, ...atuais]);
-      logger.info('Financeiro', `taxa ${taxa.id} criada`);
-    },
+    onSuccess: (taxa) => logger.info('Financeiro', `taxa ${taxa.id} criada`),
   });
 }
 
@@ -96,16 +78,12 @@ export function useGerarCobrancas() {
   const clienteQuery = useQueryClient();
   return useMutation({
     mutationFn: (taxaId: number) => gerarCobrancasEmLote(taxaId),
-    onSuccess: (resultado) => {
-      clienteQuery.setQueryData<TaxaCriada[]>(CHAVE_TAXAS_CRIADAS, (atuais = []) =>
-        atuais.map((item) => (item.taxa.id === resultado.taxaId ? { ...item, resultado } : item)),
-      );
-      return Promise.all([
+    onSuccess: () =>
+      Promise.all([
         clienteQuery.invalidateQueries({ queryKey: ['cobrancas'] }),
         clienteQuery.invalidateQueries({ queryKey: ['inadimplencia'] }),
         clienteQuery.invalidateQueries({ queryKey: ['dashboard'] }),
-      ]);
-    },
+      ]),
   });
 }
 

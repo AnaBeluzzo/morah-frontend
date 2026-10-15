@@ -6,9 +6,7 @@
   min-height: 64px;
   padding: 0 var(--espaco);
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio);
+  color: var(--cor-tinta);
   cursor: pointer;
 }
 
@@ -18,7 +16,7 @@
 }
 
 .modulo small {
-  color: var(--cor-texto-suave);
+  color: var(--cor-tinta-suave);
 }
 
 /* chave liga/desliga desenhada sobre o checkbox nativo (continua acessível) */
@@ -29,8 +27,10 @@
   width: 52px;
   height: 32px;
   min-height: 32px;
+  padding: 0;
+  border: none;
   border-radius: 16px;
-  background: var(--cor-borda);
+  background: var(--cor-linha);
   cursor: pointer;
   transition: background 0.15s;
 }

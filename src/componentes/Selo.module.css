@@ -1,33 +1,40 @@
+/* Selo de status: ponto colorido + texto na mesma cor (a cor nunca vem sozinha). */
 .selo {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px 2px 6px;
+  border-radius: var(--raio-selo);
+  background: color-mix(in srgb, currentColor 10%, transparent);
   font-size: 0.8125rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
+.selo::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
 .sucesso {
-  background: var(--cor-sucesso-fundo);
   color: var(--cor-sucesso);
 }
 
 .alerta {
-  background: var(--cor-alerta-fundo);
   color: var(--cor-alerta);
 }
 
 .perigo {
-  background: var(--cor-perigo-fundo);
   color: var(--cor-perigo);
 }
 
 .info {
-  background: var(--cor-info-fundo);
   color: var(--cor-info);
 }
 
 .neutro {
-  background: var(--cor-neutro-fundo);
   color: var(--cor-neutro);
 }

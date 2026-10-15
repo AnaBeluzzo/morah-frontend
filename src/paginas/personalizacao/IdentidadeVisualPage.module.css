@@ -15,8 +15,8 @@
 }
 
 .previa {
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio);
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio-grupo);
   overflow: hidden;
 }
 
@@ -58,7 +58,7 @@
 
 .previaBotao {
   padding: 8px 16px;
-  border-radius: var(--raio);
+  border-radius: var(--raio-grupo);
   background: var(--cor-primaria);
   color: var(--cor-primaria-texto);
   font-weight: 600;

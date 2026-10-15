@@ -1,52 +1,56 @@
-.topo {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-height: 56px;
-  /* respeita o entalhe (notch) do aparelho */
-  padding: env(safe-area-inset-top) 8px 0 calc(8px + env(safe-area-inset-left));
+/* A placa do topo é o único elemento "forte" do app: a cor do condomínio e o título largo. */
+.placa {
+  padding: env(safe-area-inset-top) calc(var(--espaco) + env(safe-area-inset-right)) 20px calc(var(--espaco) + env(safe-area-inset-left));
   background: var(--cor-primaria);
   color: var(--cor-primaria-texto);
 }
 
-.titulos {
-  flex: 1;
-  min-width: 0;
+.linhaSuperior {
   display: flex;
-  flex-direction: column;
-  padding: 4px 8px;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  /* o botão voltar encosta na borda; o texto continua alinhado com o título */
+  margin-left: -10px;
+  margin-right: -10px;
 }
 
 .condominio {
-  font-size: 0.75rem;
-  opacity: 0.9;
+  flex: 1;
+  min-width: 0;
+  padding-left: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  opacity: 0.85;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.botaoIcone + .condominio,
+.logo + .condominio {
+  padding-left: 0;
+}
+
 .titulo {
-  margin: 0;
-  font-size: 1.25rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 4px 0 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  font-stretch: 118%;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 .logo {
   width: 36px;
   height: 36px;
-  margin-left: 4px;
+  margin-left: 10px;
   border-radius: 8px;
   object-fit: contain;
   background: #ffffff;
 }
 
 .botaoIcone {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -64,23 +68,23 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   min-width: 0;
   /* espaço para a barra de abas fixa e para a área segura inferior */
-  padding: var(--espaco) calc(var(--espaco) + env(safe-area-inset-right))
-    calc(var(--altura-abas) + var(--espaco) + env(safe-area-inset-bottom)) calc(var(--espaco) + env(safe-area-inset-left));
+  padding: 20px calc(var(--espaco) + env(safe-area-inset-right)) calc(var(--altura-abas) + 28px + env(safe-area-inset-bottom))
+    calc(var(--espaco) + env(safe-area-inset-left));
 }
 
 .secao {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
 }
 
 .cabecalhoSecao {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 8px;
 }

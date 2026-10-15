@@ -1,7 +1,7 @@
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -12,7 +12,7 @@
 .ajuda {
   margin: 0;
   font-size: 0.875rem;
-  opacity: 0.8;
+  color: var(--cor-tinta-suave);
 }
 
 .erro {

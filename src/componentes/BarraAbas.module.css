@@ -9,10 +9,11 @@
   margin: 0 auto;
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   background: var(--cor-superficie);
-  border-top: 1px solid var(--cor-borda);
+  border-top: 1px solid var(--cor-linha);
 }
 
 .aba {
+  position: relative;
   flex: 1;
   min-width: 0;
   min-height: var(--altura-abas);
@@ -23,7 +24,7 @@
   gap: 2px;
   padding: 6px 2px;
   font-size: 0.75rem;
-  color: var(--cor-texto-suave);
+  color: var(--cor-tinta-suave);
   text-decoration: none;
 }
 
@@ -34,14 +35,19 @@
   white-space: nowrap;
 }
 
+/* aba ativa: um traço na cor do condomínio no alto da aba + texto forte */
 .ativa {
   color: var(--cor-primaria);
   font-weight: 700;
 }
 
-.ativa svg {
-  background: color-mix(in srgb, var(--cor-primaria) 15%, transparent);
-  border-radius: 12px;
-  padding: 0 12px;
-  width: 48px;
+.ativa::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 22%;
+  right: 22%;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--cor-primaria);
 }

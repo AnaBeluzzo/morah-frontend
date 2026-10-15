@@ -1,21 +1,37 @@
 .item {
+  position: relative;
   width: 100%;
-  min-height: 56px;
+  min-height: 60px;
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: var(--espaco);
+  padding: 14px var(--espaco);
   text-align: left;
   background: var(--cor-superficie);
-  color: var(--cor-texto);
-  border: 1px solid var(--cor-borda);
-  border-left: 4px solid var(--cor-borda);
-  border-radius: var(--raio);
+  color: var(--cor-tinta);
+  border: none;
 }
 
-.naoLida {
-  border-left-color: var(--cor-destaque);
-  font-weight: 600;
+.item > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--cor-tinta-suave);
+}
+
+/* não lida: ícone na cor do condomínio e filete de destaque */
+.naoLida > svg {
+  color: var(--cor-primaria);
+}
+
+.naoLida::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--cor-destaque);
 }
 
 .texto {
@@ -24,9 +40,9 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-weight: 400;
 }
 
 .texto small {
-  color: var(--cor-texto-suave);
+  color: var(--cor-tinta-suave);
+  font-size: 0.8125rem;
 }
