@@ -7,6 +7,9 @@ import {
   ROTULOS_STATUS_ACESSO,
   ROTULOS_STATUS_AUTORIZACAO_VISITA,
   ROTULOS_STATUS_COBRANCA,
+  ROTULOS_MOMENTO_VISTORIA,
+  ROTULOS_STATUS_RESERVA,
+  TOM_STATUS_RESERVA,
   TOM_STATUS_ACESSO,
   TOM_STATUS_AUTORIZACAO_VISITA,
   ROTULOS_STATUS_SOLICITACAO_VINCULO,
@@ -62,6 +65,12 @@ describe('rotulos', () => {
     expect(chaves(TOM_STATUS_AUTORIZACAO_VISITA)).toEqual(['autorizada', 'expirada', 'pendente', 'recusada']);
     expect(chaves(ROTULOS_STATUS_ACESSO)).toEqual(['no_condominio', 'saiu']);
     expect(chaves(TOM_STATUS_ACESSO)).toEqual(['no_condominio', 'saiu']);
+  });
+
+  it('statusReservaEMomentoVistoriaDevemTerRotuloParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_STATUS_RESERVA)).toEqual(['cancelada', 'concluida', 'confirmada', 'nao_compareceu']);
+    expect(chaves(TOM_STATUS_RESERVA)).toEqual(['cancelada', 'concluida', 'confirmada', 'nao_compareceu']);
+    expect(chaves(ROTULOS_MOMENTO_VISTORIA)).toEqual(['entrada', 'saida']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {

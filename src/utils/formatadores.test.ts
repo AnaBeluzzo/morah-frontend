@@ -7,6 +7,7 @@ import {
   formatarHora,
   formatarMoeda,
   formatarPercentual,
+  formatarPeriodo,
   formatarTempoRestante,
   hojeIso,
   paraDataHoraLocal,
@@ -39,6 +40,10 @@ describe('formatadores', () => {
     expect(formatarCompetencia('2026-09')).toBe('09/2026');
     expect(formatarPercentual(12.5)).toBe('12,5%');
     expect(formatarPercentual(100)).toBe('100%');
+  });
+
+  it('deveFormatarOPeriodoDeUmaReserva', () => {
+    expect(formatarPeriodo('2026-10-20T13:00:00Z', '2026-10-20T15:00:00Z')).toBe('20/10/2026, das 10:00 às 12:00');
   });
 
   it('deveFormatarAContagemRegressiva', () => {

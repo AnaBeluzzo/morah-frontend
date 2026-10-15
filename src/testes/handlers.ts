@@ -10,6 +10,7 @@ import type { SolicitacaoVinculo, Unidade, VinculoUnidade } from '../tipos/minha
 import type { Notificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
 import type { Acesso, AutorizacaoVisita } from '../tipos/portaria';
+import type { AreaComum, HorarioDisponivel, Reserva } from '../tipos/reservas';
 
 /** Caminho da API em qualquer origem (o ApiClient monta a URL a partir de window.location). */
 export function api(caminho: string): string {
@@ -160,6 +161,26 @@ export const ACESSOS: Acesso[] = [
   { id: 2, visitante: { id: 4, nome: 'Lucas Prado' }, entrada: '2026-10-13T10:00:00Z', saida: '2026-10-13T11:00:00Z', tipo: 'saida', status: 'saiu' },
 ];
 
+// ---------------------------------------------------------------- Reservas
+
+export const AREAS_COMUNS: AreaComum[] = [
+  { id: 1, nome: 'Salão de festas', descricao: 'Com cozinha e churrasqueira', capacidade: 80, taxa: 150, requerReserva: true, status: 'disponivel' },
+];
+
+/** Os 14 horários de 20/10/2026 (08:00 às 22:00 em São Paulo); os de `ocupados` ficam indisponíveis. */
+export function horariosDoDia(...ocupados: number[]): HorarioDisponivel[] {
+  return Array.from({ length: 14 }, (_, indice) => {
+    const hora = 11 + indice; // 08:00 em São Paulo = 11:00 UTC
+    const instante = (h: number) => new Date(Date.UTC(2026, 9, 20, h)).toISOString().replace('.000', '');
+    return { inicio: instante(hora), fim: instante(hora + 1), disponivel: !ocupados.includes(indice) };
+  });
+}
+
+export const RESERVAS: Reserva[] = [
+  { id: 1, areaComumId: 1, areaComumNome: 'Salão de festas', unidadeId: 2, solicitante: { id: 3, nome: 'Camila Duarte' }, inicio: '2026-10-20T13:00:00Z', fim: '2026-10-20T15:00:00Z', status: 'confirmada', valor: 150 },
+  { id: 2, areaComumId: 1, areaComumNome: 'Salão de festas', unidadeId: 2, inicio: '2026-10-10T13:00:00Z', fim: '2026-10-10T14:00:00Z', status: 'concluida', valor: 150 },
+];
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -267,6 +288,24 @@ export const handlers = [
       { id: 5, visitante: { id: dados.visitanteId, nome: 'Ana Costa' }, entrada: '2026-10-14T18:10:00Z', saida: saida ? '2026-10-14T19:00:00Z' : undefined, tipo: dados.tipo, status: saida ? 'saiu' : 'no_condominio' },
       { status: 201 },
     );
+  }),
+  http.get(api('/areas-comuns'), () => HttpResponse.json(AREAS_COMUNS)),
+  http.get(api('/areas-comuns/:areaComumId/disponibilidade'), ({ request }) =>
+    HttpResponse.json({ data: new URL(request.url).searchParams.get('data'), horarios: horariosDoDia(5) }),
+  ),
+  http.get(api('/reservas'), () => HttpResponse.json(pagina(RESERVAS))),
+  http.post(api('/reservas'), async ({ request }) => {
+    const dados = (await request.json()) as { inicio: string; fim: string };
+    return HttpResponse.json({ ...RESERVAS[0], id: 7, ...dados }, { status: 201 });
+  }),
+  http.get(api('/reservas/:reservaId'), ({ params }) => {
+    const reserva = RESERVAS.find((item) => item.id === Number(params.reservaId));
+    return reserva ? HttpResponse.json(reserva) : problema(404, 'Reserva não encontrada');
+  }),
+  http.delete(api('/reservas/:reservaId'), () => new HttpResponse(null, { status: 204 })),
+  http.post(api('/reservas/:reservaId/vistoria'), async ({ request }) => {
+    const { momento } = (await request.json()) as { momento: string };
+    return HttpResponse.json({ ...RESERVAS[0], status: momento === 'saida' ? 'concluida' : 'confirmada' });
   }),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {

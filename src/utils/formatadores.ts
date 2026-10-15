@@ -76,3 +76,8 @@ export function paraDataHoraLocal(instante: string): string {
 export function deDataHoraLocal(valor: string): string {
   return new Date(valor).toISOString();
 }
+
+/** Período de uma reserva: "15/10/2026, das 10:00 às 12:00". */
+export function formatarPeriodo(inicio: string, fim: string): string {
+  return `${formatarData(inicio)}, das ${formatarHora(inicio)} às ${formatarHora(fim)}`;
+}

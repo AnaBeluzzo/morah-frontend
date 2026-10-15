@@ -5,6 +5,7 @@ import type { StatusSolicitacaoVinculo, TipoVinculo } from '../tipos/minhaUnidad
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
 import type { StatusAcesso, StatusAutorizacaoVisita } from '../tipos/portaria';
+import type { MomentoVistoria, StatusReserva } from '../tipos/reservas';
 
 // Rótulos em português dos enums do contrato: um mapa por enum, com o valor do contrato como
 // chave. O tipo Record<Enum, string> obriga (em tempo de compilação) a ter rótulo para todo valor.
@@ -149,4 +150,25 @@ export const ROTULOS_STATUS_ACESSO: Record<StatusAcesso, string> = {
 export const TOM_STATUS_ACESSO: Record<StatusAcesso, TomSelo> = {
   no_condominio: 'info',
   saiu: 'neutro',
+};
+
+// ---------------------------------------------------------------- Reservas
+
+export const ROTULOS_STATUS_RESERVA: Record<StatusReserva, string> = {
+  confirmada: 'Confirmada',
+  cancelada: 'Cancelada',
+  concluida: 'Concluída',
+  nao_compareceu: 'Não compareceu',
+};
+
+export const TOM_STATUS_RESERVA: Record<StatusReserva, TomSelo> = {
+  confirmada: 'sucesso',
+  cancelada: 'neutro',
+  concluida: 'info',
+  nao_compareceu: 'perigo',
+};
+
+export const ROTULOS_MOMENTO_VISTORIA: Record<MomentoVistoria, string> = {
+  entrada: 'Entrada (antes do uso)',
+  saida: 'Saída (depois do uso)',
 };

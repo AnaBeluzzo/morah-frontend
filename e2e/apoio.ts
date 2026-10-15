@@ -122,10 +122,10 @@ export const SENHA_DEMO = 'demo123';
 
 /** Abas inferiores que cada perfil deve ver (com todos os módulos ativos). */
 export const ABAS_ESPERADAS: Record<PerfilDemo, string[]> = {
-  morador: ['Início', 'Avisos', 'Financeiro', 'Mais'],
-  proprietario: ['Início', 'Avisos', 'Financeiro', 'Mais'],
+  morador: ['Início', 'Avisos', 'Financeiro', 'Reservas', 'Mais'],
+  proprietario: ['Início', 'Avisos', 'Financeiro', 'Reservas', 'Mais'],
   sindico: ['Início', 'Financeiro', 'Avisos', 'Condomínio', 'Mais'],
-  portaria: ['Início', 'Visitantes', 'Mais'],
+  portaria: ['Início', 'Visitantes', 'Reservas', 'Mais'],
 };
 
 /** Entra pela tela de login, como uma pessoa faria (nada de injetar token). */
@@ -204,4 +204,9 @@ export function sino(pagina: Page) {
 export function competenciaUnica(mes: number): string {
   const ano = 2100 + (Math.floor(Date.now() / 1000) % 700);
   return `${ano}-${String(mes).padStart(2, '0')}`;
+}
+
+/** Data (AAAA-MM-DD) daqui a `dias` dias, no fuso do condomínio. */
+export function diaDaquiA(dias: number): string {
+  return new Date(Date.now() + dias * 86_400_000).toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
 }

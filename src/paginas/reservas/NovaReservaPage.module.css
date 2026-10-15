@@ -1,0 +1,66 @@
+.instrucao {
+  margin: 0;
+  color: var(--cor-secundaria-texto);
+}
+
+/* grade de horários: 3 por linha cabe até em 360 px */
+.horarios {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.horario {
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6px 10px;
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  border: 1.5px solid var(--cor-linha);
+  border-radius: var(--raio-campo);
+  text-align: left;
+}
+
+.horario span {
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-stretch: 112%;
+}
+
+.horario small {
+  color: var(--cor-tinta-suave);
+}
+
+.horario:disabled {
+  background: transparent;
+  border-style: dashed;
+  color: var(--cor-tinta-suave);
+}
+
+.horario:disabled span {
+  text-decoration: line-through;
+}
+
+.escolhido {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+}
+
+.escolhido small {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* o botão de reservar acompanha a rolagem logo acima da barra de abas */
+.rodape {
+  position: sticky;
+  bottom: calc(var(--altura-abas) + 8px + env(safe-area-inset-bottom));
+}

@@ -32,6 +32,11 @@ import { AcessosPage } from '../paginas/portaria/AcessosPage';
 import { AutorizacaoPage } from '../paginas/portaria/AutorizacaoPage';
 import { AutorizacoesPage } from '../paginas/portaria/AutorizacoesPage';
 import { RegistrarVisitantePage } from '../paginas/portaria/RegistrarVisitantePage';
+import { AreasComunsPage } from '../paginas/reservas/AreasComunsPage';
+import { DetalheReservaPage } from '../paginas/reservas/DetalheReservaPage';
+import { NovaReservaPage } from '../paginas/reservas/NovaReservaPage';
+import { ReservasPage } from '../paginas/reservas/ReservasPage';
+import { VistoriaPage } from '../paginas/reservas/VistoriaPage';
 import { IdentidadeVisualPage } from '../paginas/personalizacao/IdentidadeVisualPage';
 import { ModulosPage } from '../paginas/personalizacao/ModulosPage';
 import type { Perfil } from '../tipos/login';
@@ -83,6 +88,12 @@ const TELAS_PROTEGIDAS: TelaProtegida[] = [
   { caminho: 'visitantes/novo', pagina: <RegistrarVisitantePage />, perfis: PORTARIA, modulo: 'portaria' },
   { caminho: 'visitantes/:autorizacaoId', pagina: <AutorizacaoPage />, perfis: PORTARIA_E_MORADOR, modulo: 'portaria' },
   { caminho: 'acessos', pagina: <AcessosPage />, perfis: PORTARIA_E_SINDICO, modulo: 'portaria' },
+  // Reservas (qualquer perfil vê as áreas e as reservas que lhe cabem)
+  { caminho: 'reservas', pagina: <ReservasPage />, modulo: 'reservas' },
+  { caminho: 'reservas/areas', pagina: <AreasComunsPage />, modulo: 'reservas' },
+  { caminho: 'reservas/areas/:areaComumId/reservar', pagina: <NovaReservaPage />, perfis: MORADOR, modulo: 'reservas' },
+  { caminho: 'reservas/:reservaId', pagina: <DetalheReservaPage />, modulo: 'reservas' },
+  { caminho: 'reservas/:reservaId/vistoria', pagina: <VistoriaPage />, perfis: PORTARIA, modulo: 'reservas' },
   // Personalização (nunca desativada)
   { caminho: 'condominio', pagina: <CondominioPage />, perfis: SINDICO },
   { caminho: 'condominio/identidade', pagina: <IdentidadeVisualPage />, perfis: SINDICO },
