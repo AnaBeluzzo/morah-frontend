@@ -19,9 +19,11 @@ const NOTIFICACOES: ItemMenu = { rotulo: 'Notificações', caminho: '/notificaco
 const CONDOMINIO: ItemMenu = { rotulo: 'Condomínio', caminho: '/condominio', icone: 'condominio' };
 const AVISOS: ItemMenu = { rotulo: 'Avisos', caminho: '/avisos', icone: 'avisos', modulo: 'avisos' };
 const FINANCEIRO: ItemMenu = { rotulo: 'Financeiro', caminho: '/financeiro', icone: 'financeiro', modulo: 'financeiro' };
+const MINHA_UNIDADE: ItemMenu = { rotulo: 'Minha unidade', caminho: '/unidade', icone: 'unidade', modulo: 'minha_unidade' };
+const UNIDADES: ItemMenu = { rotulo: 'Unidades', caminho: '/unidades', icone: 'unidade', modulo: 'minha_unidade' };
 
 const ABAS_MORADOR: ItemMenu[] = [INICIO, AVISOS, FINANCEIRO, MAIS];
-const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL];
+const MAIS_MORADOR: ItemMenu[] = [NOTIFICACOES, PERFIL, MINHA_UNIDADE];
 
 export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: ABAS_MORADOR,
@@ -33,7 +35,7 @@ export const ABAS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
 export const ITENS_MAIS_POR_PERFIL: Record<Perfil, ItemMenu[]> = {
   morador: MAIS_MORADOR,
   proprietario: MAIS_MORADOR,
-  sindico: [NOTIFICACOES, PERFIL],
+  sindico: [NOTIFICACOES, PERFIL, UNIDADES],
   portaria: [NOTIFICACOES, PERFIL, AVISOS],
 };
 

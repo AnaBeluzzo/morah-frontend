@@ -21,6 +21,11 @@ import { LoginPage } from '../paginas/login/LoginPage';
 import { PerfilPage } from '../paginas/login/PerfilPage';
 import { TrocarPerfilPage } from '../paginas/login/TrocarPerfilPage';
 import { MaisPage } from '../paginas/mais/MaisPage';
+import { CadastrarInquilinoPage } from '../paginas/minhaUnidade/CadastrarInquilinoPage';
+import { InquilinosPage } from '../paginas/minhaUnidade/InquilinosPage';
+import { MinhaUnidadePage } from '../paginas/minhaUnidade/MinhaUnidadePage';
+import { SolicitarVinculoPage } from '../paginas/minhaUnidade/SolicitarVinculoPage';
+import { UnidadesPage } from '../paginas/minhaUnidade/UnidadesPage';
 import { NotificacoesPage } from '../paginas/notificacoes/NotificacoesPage';
 import { CondominioPage } from '../paginas/personalizacao/CondominioPage';
 import { IdentidadeVisualPage } from '../paginas/personalizacao/IdentidadeVisualPage';
@@ -34,6 +39,7 @@ import { RotaProtegida, RotaPublica } from './RotaProtegida';
 const MORADOR_E_SINDICO: Perfil[] = ['morador', 'sindico'];
 const SINDICO: Perfil[] = ['sindico'];
 const MORADOR: Perfil[] = ['morador'];
+const PROPRIETARIO: Perfil[] = ['proprietario'];
 
 interface TelaProtegida {
   caminho: string;
@@ -59,6 +65,12 @@ const TELAS_PROTEGIDAS: TelaProtegida[] = [
   { caminho: 'financeiro/documentos/novo', pagina: <NovoDocumentoPage />, perfis: SINDICO, modulo: 'financeiro' },
   { caminho: 'financeiro/taxas', pagina: <TaxasPage />, perfis: SINDICO, modulo: 'financeiro' },
   { caminho: 'financeiro/inadimplencia', pagina: <InadimplenciaPage />, perfis: SINDICO, modulo: 'financeiro' },
+  // Minha Unidade
+  { caminho: 'unidade', pagina: <MinhaUnidadePage />, perfis: MORADOR, modulo: 'minha_unidade' },
+  { caminho: 'unidade/solicitar-vinculo', pagina: <SolicitarVinculoPage />, perfis: MORADOR, modulo: 'minha_unidade' },
+  { caminho: 'unidade/inquilinos', pagina: <InquilinosPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
+  { caminho: 'unidade/inquilinos/novo', pagina: <CadastrarInquilinoPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
+  { caminho: 'unidades', pagina: <UnidadesPage />, perfis: SINDICO, modulo: 'minha_unidade' },
   // Personalização (nunca desativada)
   { caminho: 'condominio', pagina: <CondominioPage />, perfis: SINDICO },
   { caminho: 'condominio/identidade', pagina: <IdentidadeVisualPage />, perfis: SINDICO },

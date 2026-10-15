@@ -6,6 +6,7 @@ import type { Aviso } from '../tipos/avisos';
 import type { Problem } from '../tipos/comum';
 import type { Cobranca, DocumentoFinanceiro, InadimplenciaResumo, Taxa } from '../tipos/financeiro';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
+import type { SolicitacaoVinculo, Unidade, VinculoUnidade } from '../tipos/minhaUnidade';
 import type { Notificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
 
@@ -131,6 +132,20 @@ export const DOCUMENTOS: DocumentoFinanceiro[] = [
 
 export const INADIMPLENCIA: InadimplenciaResumo = { totalUnidades: 2, unidadesInadimplentes: 1, percentualInadimplencia: 50, valorTotalEmAberto: 512.5 };
 
+// ---------------------------------------------------------------- Minha Unidade
+
+export const UNIDADE_1: Unidade = { id: 1, blocoId: 1, blocoNome: 'Bloco A', identificacao: 'Apto 302', tipo: 'apartamento', fracaoIdeal: 0.5, status: 'ocupada' };
+
+export const VINCULOS: VinculoUnidade[] = [
+  { id: 1, unidadeId: 1, pessoa: { id: 2, nome: 'Rafael Nunes' }, tipoVinculo: 'proprietario', principal: true, inicio: '2024-01-01' },
+  { id: 2, unidadeId: 1, pessoa: { id: 5, nome: 'Bruno Lima' }, tipoVinculo: 'inquilino', inicio: '2026-01-01', fim: '2099-12-31' },
+  { id: 3, unidadeId: 1, pessoa: { id: 6, nome: 'Carla Souza' }, tipoVinculo: 'inquilino', inicio: '2025-01-01', fim: '2025-12-31' },
+];
+
+export const SOLICITACOES: SolicitacaoVinculo[] = [
+  { id: 4, unidadeId: 1, tipoVinculo: 'dependente', nomeSolicitado: 'Lia Nunes', status: 'pendente', solicitadoEm: '2026-10-10T12:00:00Z' },
+];
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -198,6 +213,23 @@ export const handlers = [
     HttpResponse.json({ taxaId: Number(params.taxaId), totalGeradas: 2, falhas: [] }, { status: 202 }),
   ),
   http.get(api('/financeiro/inadimplencia'), () => HttpResponse.json(INADIMPLENCIA)),
+  http.get(api('/unidades/minha'), () => HttpResponse.json(UNIDADE_1)),
+  http.get(api('/unidades/minha/vinculos'), () => HttpResponse.json(VINCULOS)),
+  http.post(api('/unidades/minha/vinculos/solicitacoes'), async ({ request }) => {
+    const dados = (await request.json()) as { tipoVinculo: string; nome: string };
+    return HttpResponse.json({ id: 9, unidadeId: 1, tipoVinculo: dados.tipoVinculo, nomeSolicitado: dados.nome, status: 'pendente', solicitadoEm: '2026-10-14T12:00:00Z' }, { status: 202 });
+  }),
+  http.post(api('/unidades/minha/inquilinos'), async ({ request }) => {
+    const dados = (await request.json()) as { nome: string; contratoInicio: string };
+    return HttpResponse.json({ id: 10, unidadeId: 1, pessoa: { id: 11, nome: dados.nome }, tipoVinculo: 'inquilino', inicio: dados.contratoInicio }, { status: 201 });
+  }),
+  http.delete(api('/unidades/minha/inquilinos/:vinculoId'), () => new HttpResponse(null, { status: 204 })),
+  http.get(api('/unidades/:unidadeId'), ({ params }) => (Number(params.unidadeId) === 1 ? HttpResponse.json(UNIDADE_1) : problema(404, 'Unidade não encontrada'))),
+  http.get(api('/unidades/:unidadeId/vinculos/solicitacoes'), () => HttpResponse.json(SOLICITACOES)),
+  http.patch(api('/unidades/:unidadeId/vinculos/solicitacoes/:solicitacaoId'), async ({ request }) => {
+    const { decisao } = (await request.json()) as { decisao: string };
+    return HttpResponse.json({ ...SOLICITACOES[0], status: decisao });
+  }),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {
     const alteracoes = (await request.json()) as Partial<Personalizacao>;

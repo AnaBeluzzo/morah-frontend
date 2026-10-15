@@ -1,6 +1,7 @@
 import type { PrioridadeAviso, TipoPublicoAlvo } from '../tipos/avisos';
 import type { StatusCobranca, TipoRateio } from '../tipos/financeiro';
 import type { Perfil } from '../tipos/login';
+import type { StatusSolicitacaoVinculo, TipoVinculo } from '../tipos/minhaUnidade';
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
 
@@ -101,4 +102,24 @@ export const ROTULOS_MEIO_PAGAMENTO: Record<string, string> = {
   dinheiro: 'Dinheiro',
   boleto: 'Boleto',
   cheque: 'Cheque',
+};
+
+// ---------------------------------------------------------------- Minha Unidade
+
+export const ROTULOS_TIPO_VINCULO: Record<TipoVinculo, string> = {
+  proprietario: 'Proprietário',
+  inquilino: 'Inquilino',
+  dependente: 'Dependente',
+};
+
+export const ROTULOS_STATUS_SOLICITACAO_VINCULO: Record<StatusSolicitacaoVinculo, string> = {
+  pendente: 'Aguardando aprovação do síndico',
+  aprovada: 'Aprovada',
+  rejeitada: 'Rejeitada',
+};
+
+export const TOM_STATUS_SOLICITACAO_VINCULO: Record<StatusSolicitacaoVinculo, TomSelo> = {
+  pendente: 'alerta',
+  aprovada: 'sucesso',
+  rejeitada: 'perigo',
 };

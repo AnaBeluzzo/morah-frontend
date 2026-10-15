@@ -5,6 +5,9 @@ import {
   ROTULOS_PERFIL,
   ROTULOS_PRIORIDADE_AVISO,
   ROTULOS_STATUS_COBRANCA,
+  ROTULOS_STATUS_SOLICITACAO_VINCULO,
+  ROTULOS_TIPO_VINCULO,
+  TOM_STATUS_SOLICITACAO_VINCULO,
   ROTULOS_TIPO_RATEIO,
   TOM_STATUS_COBRANCA,
   ROTULOS_TIPO_NOTIFICACAO,
@@ -42,6 +45,12 @@ describe('rotulos', () => {
     expect(chaves(ROTULOS_STATUS_COBRANCA)).toEqual(['atrasado', 'cancelado', 'pago', 'pendente']);
     expect(chaves(TOM_STATUS_COBRANCA)).toEqual(['atrasado', 'cancelado', 'pago', 'pendente']);
     expect(chaves(ROTULOS_TIPO_RATEIO)).toEqual(['fracao_ideal', 'igualitario']);
+  });
+
+  it('tipoVinculoEStatusSolicitacaoDevemTerRotuloParaTodoValorDoContrato', () => {
+    expect(chaves(ROTULOS_TIPO_VINCULO)).toEqual(['dependente', 'inquilino', 'proprietario']);
+    expect(chaves(ROTULOS_STATUS_SOLICITACAO_VINCULO)).toEqual(['aprovada', 'pendente', 'rejeitada']);
+    expect(chaves(TOM_STATUS_SOLICITACAO_VINCULO)).toEqual(['aprovada', 'pendente', 'rejeitada']);
   });
 
   it('moduloCodigoDeveTerRotuloParaTodoValorDoContrato', () => {
