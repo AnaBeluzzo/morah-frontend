@@ -4,6 +4,7 @@
 import { http, HttpResponse } from 'msw';
 import type { Aviso } from '../tipos/avisos';
 import type { Problem } from '../tipos/comum';
+import type { DashboardMorador, DashboardPortaria, DashboardSindico } from '../tipos/dashboard';
 import type { Encomenda } from '../tipos/encomendas';
 import type { Cobranca, DocumentoFinanceiro, InadimplenciaResumo, Taxa } from '../tipos/financeiro';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
@@ -189,6 +190,33 @@ export const ENCOMENDAS: Encomenda[] = [
   { id: 2, unidadeId: 1, transportadora: 'Jadlog', codigoRetirada: '111222', recebidaEm: '2026-10-10T12:00:00Z', retiradaEm: '2026-10-10T18:00:00Z', status: 'retirada' },
 ];
 
+// ---------------------------------------------------------------- Tela inicial
+
+export const PAINEL_MORADOR: DashboardMorador = {
+  perfil: 'proprietario',
+  unidade: UNIDADE_1,
+  proximosBoletos: [COBRANCAS[0]],
+  avisosRecentes: [AVISOS[0]],
+  encomendasPendentes: [ENCOMENDAS[0]],
+  autorizacoesPendentes: [AUTORIZACOES[0]],
+  proximasReservas: [RESERVAS[0]],
+};
+
+export const PAINEL_SINDICO: DashboardSindico = {
+  perfil: 'sindico',
+  inadimplencia: INADIMPLENCIA,
+  avisosPublicadosRecentes: [AVISOS[1]],
+  solicitacoesVinculoPendentes: 3,
+  ocorrenciasAbertas: 1,
+};
+
+export const PAINEL_PORTARIA: DashboardPortaria = {
+  perfil: 'portaria',
+  autorizacoesPendentes: [AUTORIZACOES[0]],
+  reservasDoDia: [RESERVAS[0]],
+  encomendasRecebidasHoje: 4,
+};
+
 export const handlers = [
   http.post(api('/auth/refresh'), () => HttpResponse.json(TOKENS_RENOVADOS)),
   http.post(api('/auth/login'), async ({ request }) => {
@@ -337,6 +365,13 @@ export const handlers = [
   http.post(api('/encomendas/:encomendaId/ocorrencias'), async ({ request }) =>
     HttpResponse.json({ id: 1, ...((await request.json()) as object), status: 'aberta', abertaEm: '2026-10-14T23:00:00Z' }, { status: 201 }),
   ),
+  // o formato depende do perfil: nos testes, o token de acesso é "access-<perfil>"
+  http.get(api('/home/dashboard'), ({ request }) => {
+    const token = request.headers.get('Authorization') ?? '';
+    if (token.endsWith('sindico')) return HttpResponse.json(PAINEL_SINDICO);
+    if (token.endsWith('portaria')) return HttpResponse.json(PAINEL_PORTARIA);
+    return HttpResponse.json(PAINEL_MORADOR);
+  }),
   http.get(api('/condominio/personalizacao'), () => HttpResponse.json(PERSONALIZACAO)),
   http.patch(api('/condominio/personalizacao'), async ({ request }) => {
     const alteracoes = (await request.json()) as Partial<Personalizacao>;

@@ -18,5 +18,8 @@ export default defineConfig({
     env: { TZ: 'America/Sao_Paulo' },
     // os testes de tela digitam como uma pessoa (user-event): folga para máquinas mais lentas
     testTimeout: 15_000,
+    // poucos processos em paralelo: no Windows, muitos workers lendo node_modules ao mesmo
+    // tempo às vezes falham ao abrir arquivos (antivírus); 2 já dá um tempo bom
+    maxWorkers: 2,
   },
 });

@@ -104,7 +104,8 @@
 
 .indicador strong {
   display: block;
-  font-size: 1.625rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  font-stretch: 115%;
+  overflow-wrap: normal;
+  line-height: 1.15;
 }

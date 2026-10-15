@@ -210,3 +210,13 @@ export function competenciaUnica(mes: number): string {
 export function diaDaquiA(dias: number): string {
   return new Date(Date.now() + dias * 86_400_000).toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
 }
+
+/**
+ * Depois de ligar/desligar um módulo, o backend recarrega o cache de módulos ativos na próxima
+ * requisição. Se uma rota de módulo e a tela inicial chegam juntas nesse momento, o backend (SQLite
+ * com 1 conexão + carga do cache dentro do computeIfAbsent) fica travado ~30 s. Uma chamada sozinha
+ * a uma rota de módulo recarrega o cache antes de o teste continuar. (Ver "Melhorias sugeridas".)
+ */
+export async function aquecerCacheDeModulos(request: APIRequestContext): Promise<void> {
+  await (await apiComo(request, 'sindico')).get('/avisos?size=1');
+}

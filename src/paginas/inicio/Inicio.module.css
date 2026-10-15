@@ -1,0 +1,82 @@
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cabecalho h2 {
+  margin: 0;
+}
+
+.verTudo {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--cor-primaria);
+}
+
+.nada {
+  margin: 0;
+  padding: 14px var(--espaco);
+  border: 1px dashed var(--cor-linha);
+  border-radius: var(--raio-grupo);
+  color: var(--cor-secundaria-texto);
+}
+
+/* a unidade do morador como a placa da porta: o número em letra larga */
+.placaUnidade {
+  display: block;
+  padding: 18px var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  border: 1px solid var(--cor-linha);
+  border-left: 6px solid var(--cor-primaria);
+  border-radius: var(--raio-grupo);
+  text-decoration: none;
+}
+
+.placaUnidade strong {
+  display: block;
+  font-size: 2rem;
+  font-weight: 850;
+  font-stretch: 125%;
+  line-height: 1.1;
+}
+
+.placaUnidade span {
+  color: var(--cor-tinta-suave);
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.numero {
+  display: block;
+  padding: var(--espaco);
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio-grupo);
+  text-decoration: none;
+}
+
+.numero strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 850;
+  /* números quebram só entre palavras ("R$" e o valor), nunca no meio */
+  overflow-wrap: normal;
+  line-height: 1.15;
+}

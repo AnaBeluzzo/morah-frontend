@@ -23,7 +23,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const mostrarToast = useCallback((texto: string, tipo: TipoToast = 'sucesso') => {
     const id = proximoId.current++;
-    setMensagens((atuais) => [...atuais, { id, texto, tipo }]);
+    // a mesma mensagem repetida substitui a anterior em vez de empilhar
+    setMensagens((atuais) => [...atuais.filter((mensagem) => mensagem.texto !== texto), { id, texto, tipo }]);
     setTimeout(() => setMensagens((atuais) => atuais.filter((mensagem) => mensagem.id !== id)), DURACAO_MS);
   }, []);
 

@@ -1,4 +1,4 @@
-import { abrirAba, apiComo, barraDeAbas, entrar, expect, sufixoUnico, test, titulo } from './apoio';
+import { abrirAba, apiComo, aquecerCacheDeModulos, barraDeAbas, entrar, expect, sufixoUnico, test, titulo } from './apoio';
 
 // A identidade visual e os módulos são do condomínio inteiro: cada teste devolve o que mudou.
 test.describe('Personalização', () => {
@@ -15,6 +15,7 @@ test.describe('Personalização', () => {
     for (const modulo of ['financeiro', 'portaria', 'avisos', 'reservas', 'minha_unidade', 'encomendas']) {
       await sindica.patch(`/condominio/modulos/${modulo}`, { ativo: true });
     }
+    await aquecerCacheDeModulos(request);
   });
 
   test('sindicoMudaCoresENomeEOAppRefleteNaHoraEPersisteAoRecarregar', async ({ page }) => {
@@ -77,15 +78,19 @@ test.describe('Personalização', () => {
     await expect(page.getByRole('banner').getByRole('img')).toHaveCount(0);
   });
 
-  test('desativarEncomendasSomeAAbaARotaMostraModuloIndisponivelEReativarVolta', async ({ page, novaPagina }) => {
+  test('desativarEncomendasSomeAAbaARotaMostraModuloIndisponivelEOPainelEscondeASecao', async ({ page, novaPagina, request }) => {
     const portaria = await novaPagina();
     await entrar(portaria, 'portaria');
     await expect(barraDeAbas(portaria).getByRole('link', { name: 'Encomendas' })).toBeVisible();
+    const moradora = await novaPagina();
+    await entrar(moradora, 'morador');
+    await expect(moradora.getByRole('region', { name: 'Encomendas na portaria' })).toBeVisible();
 
     await entrar(page, 'sindico');
     await page.goto('/condominio/modulos');
     await page.getByRole('switch', { name: /Encomendas/ }).click();
     await expect(page.getByText('Encomendas desativado')).toBeVisible();
+    await aquecerCacheDeModulos(request);
 
     // a portaria abre o app de novo: a aba sumiu e a rota direta avisa que o módulo está desligado
     await portaria.goto('/');
@@ -93,12 +98,19 @@ test.describe('Personalização', () => {
     await expect(barraDeAbas(portaria).getByRole('link')).toHaveText(['Início', 'Visitantes', 'Reservas', 'Mais']);
     await portaria.goto('/encomendas');
     await expect(portaria.getByRole('heading', { name: 'Módulo indisponível', level: 2 })).toBeVisible();
+    // e o painel da moradora esconde a seção de encomendas
+    await moradora.reload();
+    await expect(moradora.getByRole('region', { name: 'Próximos boletos' })).toBeVisible();
+    await expect(moradora.getByRole('region', { name: 'Encomendas na portaria' })).toHaveCount(0);
 
     await page.getByRole('switch', { name: /Encomendas/ }).click();
     await expect(page.getByText('Encomendas ativado')).toBeVisible();
+    await aquecerCacheDeModulos(request);
     await portaria.goto('/encomendas');
     await expect(titulo(portaria)).toHaveText('Encomendas');
     await expect(barraDeAbas(portaria).getByRole('link', { name: 'Encomendas' })).toBeVisible();
+    await moradora.reload();
+    await expect(moradora.getByRole('region', { name: 'Encomendas na portaria' })).toBeVisible();
   });
 
   test('desativarEReativarModuloDeveRefletirNaHoraEPersistir', async ({ page }) => {
