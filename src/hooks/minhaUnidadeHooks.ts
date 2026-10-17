@@ -1,15 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  alterarVeiculo,
   buscarMinhaUnidade,
   buscarSolicitacoesVinculo,
   buscarUnidade,
+  buscarVeiculos,
   buscarVinculosMinhaUnidade,
   criarInquilino,
+  criarVeiculo,
   decidirSolicitacaoVinculo,
   deletarInquilino,
+  deletarVeiculo,
   solicitarVinculo,
 } from '../api/minhaUnidadeApi';
-import type { DecisaoSolicitacaoVinculoRequest, InquilinoCreateRequest, SolicitacaoVinculoCreateRequest } from '../tipos/minhaUnidade';
+import type {
+  DecisaoSolicitacaoVinculoRequest,
+  InquilinoCreateRequest,
+  SolicitacaoVinculoCreateRequest,
+  VeiculoCreateRequest,
+  VeiculoUpdateRequest,
+} from '../tipos/minhaUnidade';
 import { Logger } from '../utils/logger';
 
 const logger = Logger.getInstance();
@@ -64,5 +74,35 @@ export function useDecidirSolicitacaoVinculo(unidadeId: number) {
         clienteQuery.invalidateQueries({ queryKey: ['solicitacoes', unidadeId] }),
         clienteQuery.invalidateQueries({ queryKey: ['dashboard'] }),
       ]),
+  });
+}
+
+// ---------------------------------------------------------------- veículos
+
+export function useVeiculos() {
+  return useQuery({ queryKey: ['veiculos'], queryFn: buscarVeiculos });
+}
+
+export function useCriarVeiculo() {
+  const clienteQuery = useQueryClient();
+  return useMutation({
+    mutationFn: (dados: VeiculoCreateRequest) => criarVeiculo(dados),
+    onSuccess: () => clienteQuery.invalidateQueries({ queryKey: ['veiculos'] }),
+  });
+}
+
+export function useAlterarVeiculo(veiculoId: number) {
+  const clienteQuery = useQueryClient();
+  return useMutation({
+    mutationFn: (dados: VeiculoUpdateRequest) => alterarVeiculo(veiculoId, dados),
+    onSuccess: () => clienteQuery.invalidateQueries({ queryKey: ['veiculos'] }),
+  });
+}
+
+export function useDeletarVeiculo() {
+  const clienteQuery = useQueryClient();
+  return useMutation({
+    mutationFn: (veiculoId: number) => deletarVeiculo(veiculoId),
+    onSuccess: () => clienteQuery.invalidateQueries({ queryKey: ['veiculos'] }),
   });
 }

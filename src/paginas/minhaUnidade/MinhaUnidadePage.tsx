@@ -41,6 +41,9 @@ export function MinhaUnidadePage() {
         <BotaoLink para="/unidade/solicitar-vinculo" variante="secundario">
           Solicitar vínculo
         </BotaoLink>
+        <BotaoLink para="/unidade/veiculos" variante="secundario">
+          Veículos
+        </BotaoLink>
         {perfil === 'proprietario' && (
           <BotaoLink para="/unidade/inquilinos" variante="secundario">
             Inquilinos
