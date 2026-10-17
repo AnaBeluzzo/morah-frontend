@@ -2,7 +2,7 @@
 
 Front-end mobile do **Morah**, sistema de gestão de condomínios desenvolvido como projeto
 acadêmico do 6º período de Engenharia de Software. Consome a API do `morah-backend` (contrato
-`morah-openapi.yaml`, "Morah API — Gestão Condominial", v2.0.0), que é a fonte da verdade:
+`morah-openapi.yaml`, "Morah API — Gestão Condominial", v2.1.0), que é a fonte da verdade:
 endpoints, campos, códigos HTTP e perfis seguem exatamente o contrato.
 
 O app consome **54 das 55 operações** do contrato. A única que ele não chama é
@@ -248,6 +248,10 @@ As 54 operações consumidas. "Arquivo" é a função em `src/api/` (e a tela em
 | Solicitar vínculo (`minhaUnidade/SolicitarVinculoPage`) | `POST /unidades/minha/vinculos/solicitacoes` | `minhaUnidadeApi.solicitarVinculo` |
 | Cadastrar inquilino (`minhaUnidade/CadastrarInquilinoPage`) | `POST /unidades/minha/inquilinos` | `minhaUnidadeApi.criarInquilino` |
 | Inquilinos (`minhaUnidade/InquilinosPage`) | `DELETE /unidades/minha/inquilinos/{id}` | `minhaUnidadeApi.deletarInquilino` |
+| Veículos (`minhaUnidade/VeiculosPage`) | `GET /unidades/minha/veiculos` | `minhaUnidadeApi.buscarVeiculos` |
+| Veículos (`minhaUnidade/VeiculosPage`) | `DELETE /unidades/minha/veiculos/{id}` | `minhaUnidadeApi.deletarVeiculo` |
+| Cadastrar veículo (`minhaUnidade/FormularioVeiculoPage`) | `POST /unidades/minha/veiculos` | `minhaUnidadeApi.criarVeiculo` |
+| Editar veículo (`minhaUnidade/FormularioVeiculoPage`) | `PATCH /unidades/minha/veiculos/{id}` | `minhaUnidadeApi.alterarVeiculo` |
 | Unidades (`minhaUnidade/UnidadesPage`) | `GET /unidades/{id}` | `minhaUnidadeApi.buscarUnidade` |
 | Unidades (`minhaUnidade/UnidadesPage`) | `GET /unidades/{id}/vinculos/solicitacoes` | `minhaUnidadeApi.buscarSolicitacoesVinculo` |
 | Unidades (`minhaUnidade/UnidadesPage`) | `PATCH /unidades/{id}/vinculos/solicitacoes/{id}` | `minhaUnidadeApi.decidirSolicitacaoVinculo` |

@@ -4,6 +4,9 @@ import type {
   SolicitacaoVinculo,
   SolicitacaoVinculoCreateRequest,
   Unidade,
+  Veiculo,
+  VeiculoCreateRequest,
+  VeiculoUpdateRequest,
   VinculoUnidade,
 } from '../tipos/minhaUnidade';
 import { ApiClient } from './ApiClient';
@@ -47,4 +50,22 @@ export function buscarSolicitacoesVinculo(unidadeId: number): Promise<Solicitaca
 
 export function decidirSolicitacaoVinculo(unidadeId: number, solicitacaoId: number, dados: DecisaoSolicitacaoVinculoRequest): Promise<SolicitacaoVinculo> {
   return cliente.patch<SolicitacaoVinculo>(`/unidades/${unidadeId}/vinculos/solicitacoes/${solicitacaoId}`, dados);
+}
+
+// ---------------------------------------------------------------- veículos da unidade (morador/proprietário)
+
+export function buscarVeiculos(): Promise<Veiculo[]> {
+  return cliente.get<Veiculo[]>('/unidades/minha/veiculos');
+}
+
+export function criarVeiculo(dados: VeiculoCreateRequest): Promise<Veiculo> {
+  return cliente.post<Veiculo>('/unidades/minha/veiculos', dados);
+}
+
+export function alterarVeiculo(veiculoId: number, dados: VeiculoUpdateRequest): Promise<Veiculo> {
+  return cliente.patch<Veiculo>(`/unidades/minha/veiculos/${veiculoId}`, dados);
+}
+
+export function deletarVeiculo(veiculoId: number): Promise<void> {
+  return cliente.delete(`/unidades/minha/veiculos/${veiculoId}`);
 }

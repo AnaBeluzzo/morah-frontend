@@ -28,10 +28,12 @@ import { PerfilPage } from '../paginas/login/PerfilPage';
 import { TrocarPerfilPage } from '../paginas/login/TrocarPerfilPage';
 import { MaisPage } from '../paginas/mais/MaisPage';
 import { CadastrarInquilinoPage } from '../paginas/minhaUnidade/CadastrarInquilinoPage';
+import { EditarVeiculoPage, NovoVeiculoPage } from '../paginas/minhaUnidade/FormularioVeiculoPage';
 import { InquilinosPage } from '../paginas/minhaUnidade/InquilinosPage';
 import { MinhaUnidadePage } from '../paginas/minhaUnidade/MinhaUnidadePage';
 import { SolicitarVinculoPage } from '../paginas/minhaUnidade/SolicitarVinculoPage';
 import { UnidadesPage } from '../paginas/minhaUnidade/UnidadesPage';
+import { VeiculosPage } from '../paginas/minhaUnidade/VeiculosPage';
 import { NotificacoesPage } from '../paginas/notificacoes/NotificacoesPage';
 import { CondominioPage } from '../paginas/personalizacao/CondominioPage';
 import { AcessosPage } from '../paginas/portaria/AcessosPage';
@@ -88,6 +90,9 @@ const TELAS_PROTEGIDAS: TelaProtegida[] = [
   { caminho: 'unidade/solicitar-vinculo', pagina: <SolicitarVinculoPage />, perfis: MORADOR, modulo: 'minha_unidade' },
   { caminho: 'unidade/inquilinos', pagina: <InquilinosPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
   { caminho: 'unidade/inquilinos/novo', pagina: <CadastrarInquilinoPage />, perfis: PROPRIETARIO, modulo: 'minha_unidade' },
+  { caminho: 'unidade/veiculos', pagina: <VeiculosPage />, perfis: MORADOR, modulo: 'minha_unidade' },
+  { caminho: 'unidade/veiculos/novo', pagina: <NovoVeiculoPage />, perfis: MORADOR, modulo: 'minha_unidade' },
+  { caminho: 'unidade/veiculos/:veiculoId/editar', pagina: <EditarVeiculoPage />, perfis: MORADOR, modulo: 'minha_unidade' },
   { caminho: 'unidades', pagina: <UnidadesPage />, perfis: SINDICO, modulo: 'minha_unidade' },
   // Portaria
   { caminho: 'visitantes', pagina: <AutorizacoesPage />, perfis: PORTARIA_E_MORADOR, modulo: 'portaria' },

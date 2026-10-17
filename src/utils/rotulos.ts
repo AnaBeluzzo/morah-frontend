@@ -2,7 +2,7 @@ import type { PrioridadeAviso, TipoPublicoAlvo } from '../tipos/avisos';
 import type { StatusAutorizacaoRetirada, StatusEncomenda, StatusOcorrencia } from '../tipos/encomendas';
 import type { StatusCobranca, TipoRateio } from '../tipos/financeiro';
 import type { Perfil } from '../tipos/login';
-import type { StatusSolicitacaoVinculo, TipoVinculo } from '../tipos/minhaUnidade';
+import type { StatusSolicitacaoVinculo, TipoVeiculo, TipoVinculo } from '../tipos/minhaUnidade';
 import type { TipoNotificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo } from '../tipos/personalizacao';
 import type { StatusAcesso, StatusAutorizacaoVisita } from '../tipos/portaria';
@@ -125,6 +125,11 @@ export const TOM_STATUS_SOLICITACAO_VINCULO: Record<StatusSolicitacaoVinculo, To
   pendente: 'alerta',
   aprovada: 'sucesso',
   rejeitada: 'perigo',
+};
+
+export const ROTULOS_TIPO_VEICULO: Record<TipoVeiculo, string> = {
+  carro: 'Carro',
+  moto: 'Moto',
 };
 
 // ---------------------------------------------------------------- Portaria

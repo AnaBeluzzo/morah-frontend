@@ -8,7 +8,7 @@ import type { DashboardMorador, DashboardPortaria, DashboardSindico } from '../t
 import type { Encomenda } from '../tipos/encomendas';
 import type { Cobranca, DocumentoFinanceiro, InadimplenciaResumo, Taxa } from '../tipos/financeiro';
 import type { ContextoAtivo, LoginRequest, MeResponse, Perfil } from '../tipos/login';
-import type { SolicitacaoVinculo, Unidade, VinculoUnidade } from '../tipos/minhaUnidade';
+import type { SolicitacaoVinculo, Unidade, Veiculo, VinculoUnidade } from '../tipos/minhaUnidade';
 import type { Notificacao } from '../tipos/notificacoes';
 import type { ModuloCodigo, ModuloCondominio, Personalizacao } from '../tipos/personalizacao';
 import type { Acesso, AutorizacaoVisita } from '../tipos/portaria';
@@ -148,6 +148,11 @@ export const VINCULOS: VinculoUnidade[] = [
 
 export const SOLICITACOES: SolicitacaoVinculo[] = [
   { id: 4, unidadeId: 1, tipoVinculo: 'dependente', nomeSolicitado: 'Lia Nunes', status: 'pendente', solicitadoEm: '2026-10-10T12:00:00Z' },
+];
+
+export const VEICULOS: Veiculo[] = [
+  { id: 1, unidadeId: 1, placa: 'ABC1D23', modelo: 'Fiat Argo', cor: 'Prata', tipo: 'carro' },
+  { id: 2, unidadeId: 1, placa: 'XYZ9A87', modelo: 'Honda CG 160', tipo: 'moto' },
 ];
 
 // ---------------------------------------------------------------- Portaria
@@ -295,6 +300,17 @@ export const handlers = [
     return HttpResponse.json({ id: 10, unidadeId: 1, pessoa: { id: 11, nome: dados.nome }, tipoVinculo: 'inquilino', inicio: dados.contratoInicio }, { status: 201 });
   }),
   http.delete(api('/unidades/minha/inquilinos/:vinculoId'), () => new HttpResponse(null, { status: 204 })),
+  http.get(api('/unidades/minha/veiculos'), () => HttpResponse.json(VEICULOS)),
+  http.post(api('/unidades/minha/veiculos'), async ({ request }) => {
+    const dados = (await request.json()) as Omit<Veiculo, 'id' | 'unidadeId'>;
+    return HttpResponse.json({ id: 9, unidadeId: 1, ...dados, placa: dados.placa.replace('-', '').toUpperCase() }, { status: 201 });
+  }),
+  http.patch(api('/unidades/minha/veiculos/:veiculoId'), async ({ params, request }) => {
+    const veiculo = VEICULOS.find((item) => item.id === Number(params.veiculoId));
+    if (!veiculo) return problema(404, 'Veículo não encontrado');
+    return HttpResponse.json({ ...veiculo, ...((await request.json()) as object) });
+  }),
+  http.delete(api('/unidades/minha/veiculos/:veiculoId'), () => new HttpResponse(null, { status: 204 })),
   http.get(api('/unidades/:unidadeId'), ({ params }) => (Number(params.unidadeId) === 1 ? HttpResponse.json(UNIDADE_1) : problema(404, 'Unidade não encontrada'))),
   http.get(api('/unidades/:unidadeId/vinculos/solicitacoes'), () => HttpResponse.json(SOLICITACOES)),
   http.patch(api('/unidades/:unidadeId/vinculos/solicitacoes/:solicitacaoId'), async ({ request }) => {

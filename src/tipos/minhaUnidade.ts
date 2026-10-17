@@ -59,3 +59,25 @@ export interface InquilinoCreateRequest {
   contratoInicio: string;
   contratoFim?: string;
 }
+
+export type TipoVeiculo = 'carro' | 'moto';
+
+export interface Veiculo {
+  id: number;
+  unidadeId: number;
+  /** Gravada pelo servidor em maiúsculas e sem hífen (ex.: ABC1D23). */
+  placa: string;
+  modelo: string;
+  cor?: string;
+  tipo: TipoVeiculo;
+}
+
+export interface VeiculoCreateRequest {
+  placa: string;
+  modelo: string;
+  cor?: string;
+  tipo: TipoVeiculo;
+}
+
+/** PATCH: só os campos enviados são alterados. */
+export type VeiculoUpdateRequest = Partial<VeiculoCreateRequest>;
